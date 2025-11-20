@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rankova Studio | Корисні Лінки</title>
+    <!-- Підключення Tailwind CSS для корпоративного стилю Rankova Studio --><script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Стилі, що відповідають корпоративному дизайну Rankova Studio */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8; /* Світлий фон */
+        }
+        .main-container {
+            max-width: 400px; /* Обмеження ширини для мобільно-орієнтованого дизайну */
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+        /* Оновлений стиль для контейнера логотипу */
+        .rankova-logo-img-container {
+            display: flex;
+            justify-content: center;
+            /* Збільшуємо відступ, оскільки прибрали h1 */
+            margin-bottom: 5px; 
+            padding-top: 10px;
+        }
+        .rankova-logo-img {
+            max-width: 250px; /* Обмежте ширину логотипу, щоб він виглядав гармонійно */
+            height: auto;
+        }
+        .rankova-text-yellow {
+            color: #FFC300; /* Яскравий жовтий колір, як на зразку */
+            padding-left: 2px;
+        }
+        .rankova-link-button {
+            /* Стилі для АКТИВНИХ кнопок: жовтий фон */
+            background-color: #FFC300; /* Яскравий жовтий */
+            color: #1a1a1a;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 0.75rem; /* Закруглені кути */
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* М'яка тінь */
+            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            flex-direction: column; /* Дозволяє розміщувати текст в два рядки */
+            text-decoration: none;
+        }
+        .rankova-link-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* НОВИЙ СТИЛЬ: Неактивна (сіра) кнопка */
+        .rankova-disabled-button {
+            /* Сірий фон, щоб показати, що вона неактивна */
+            background-color: #d1d5db; /* Light Gray 300 */
+            color: #6b7280; /* Gray 500 */
+            cursor: default; /* Курсор за замовчуванням */
+            pointer-events: none; /* Вимикає клікабельність */
+
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column; 
+            font-size: 1.125rem;
+            text-decoration: none;
+        }
+
+        /* Стиль для кнопки "Записатись" */
+        .rankova-cta-button {
+            background-color: #FACC15; 
+            color: #1a1a1a;
+            padding: 1rem 1.5rem; /* Зменшено з 1.25rem */
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 0.75rem;
+            font-weight: 800; 
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem; /* Зменшено з 1.25rem */
+            border: 2px solid #F0B400; 
+        }
+        .rankova-cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .icon-social {
+            color: #1a1a1a; /* Чорний колір іконок */
+            transition: color 0.1s ease-in-out;
+        }
+        /* Instagram: наведення - рожевий */
+        .icon-social.instagram:hover {
+            filter: hue-rotate(300deg) brightness(0.9); /* Змінює відтінок, імітуючи рожевий, якщо іконка чорна */
+        }
+        /* Telegram: наведення - синій */
+        .icon-social.telegram:hover {
+            color: #0088CC; /* Telegram's brand color */
+        }
+
+        /* Іконки (для соцмереж, замість Font Awesome) */
+        .icon-svg {
+            width: 28px; /* Збільшимо розмір іконок */
+            height: 28px;
+            fill: currentColor;
+        }
+        /* Стиль для Instagram PNG іконки */
+        .icon-img {
+            width: 28px;
+            height: 28px;
+            transition: transform 0.1s ease-in-out;
+        }
+        .icon-social.instagram:hover .icon-img {
+            transform: scale(1.1); /* Збільшення при наведенні */
+            /* filter: hue-rotate(300deg) brightness(0.9); Можна додати, якщо зображення монохромне і потрібно змінити колір */
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <!-- 1. Шапка та Брендінг (Header & Branding) --><header class="text-center mb-8">
+        <!-- Блок з логотипом-зображенням --><div class="rankova-logo-img-container">
+            <img src="https://github.com/max-vorozhko/rankova_studio_drum/blob/main/Rankova%20logo.png?raw=true" alt="Rankova Studio Logo" class="rankova-logo-img">
+        </div>
+        
+        <!-- Підзаголовок --><p class="text-gray-500 mt-1">Корисні ресурси для наших учнів</p>
+    </header>
+
+    <!-- 2. Блок з посиланнями на тренажери --><nav class="space-y-4 mb-8">
+        
+        <!-- Драм Тренажер (РОБОЧЕ ПОСИЛАННЯ 1) --><a href="https://max-vorozhko.github.io/rankova_studio_drum_falling_notes/" target="_blank" class="rankova-link-button" id="link-drum-trainer">
+            🥁 Драм Тренажер
+        </a>
+
+        <!-- Тренажер Ритму Барабанів (РОБОЧЕ ПОСИЛАННЯ 2) --><a href="https://max-vorozhko.github.io/rankova_studio_drum/" target="_blank" class="rankova-link-button" id="link-rhythm-trainer">
+            🎶 Тренажер Ритму Барабанів
+        </a>
+
+        <!-- КВІЗ (РОБОЧЕ ПОСИЛАННЯ 3 - ПЕРЕНЕСЕНО ВГОРУ) --><a href="https://max-vorozhko.github.io/rankova_quiz/" target="_blank" class="rankova-link-button" id="link-quiz">
+            🧠 КВІЗ
+        </a>
+        
+        <!-- Корисні Уроки для Фортепіано (В РОЗРОБЦІ - СІРА КНОПКА - ПЕРЕНЕСЕНО ВНИЗ) --><div class="rankova-disabled-button" id="link-piano-lessons">
+            <span class="text-lg">🎹 Корисні Уроки для Фортепіано</span>
+            <span class="text-xs mt-1 font-normal uppercase text-gray-500">(в розробці)</span>
+        </div>
+        
+    </nav>
+
+    <!-- 3. Кнопка "Записатись на урок" (CTA - Call to Action) --><a href="https://n813529.alteg.io/company/764262/record-type?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnUSIDwAJ84mJghqcFS8AQfHeoeUPbm_temxO6AUnToR2gV11weB_21f6POnA_aem_46nl6shJ6gAognpwObq5zA&o=" 
+       target="_blank" 
+       class="rankova-cta-button" 
+       id="link-book-lesson">
+        ✏️ Записатись на урок!
+    </a>
+
+
+    <!-- Роздільник --><div class="my-10 border-t border-gray-200"></div>
+
+    <!-- 4. Контакти та Соцмережі (Footer/Contacts) --><footer class="text-center">
+        <p class="text-gray-600 mb-4 font-medium">Слідкуй за нами</p>
+        <div class="flex justify-center space-x-6">
+            
+            <!-- Instagram (З реальним посиланням та PNG-зображенням) --><a href="https://www.instagram.com/rankova.studio/" target="_blank" class="icon-social instagram" aria-label="Instagram Rankova Studio">
+                <img src="https://github.com/max-vorozhko/rankova_usefull/blob/main/insta%20logo.png?raw=true" alt="Instagram Icon" class="icon-img">
+            </a>
+
+            <!-- Telegram (З реальним посиланням та іконкою SVG) --><a href="https://t.me/rankovastudioevents" target="_blank" class="icon-social telegram" aria-label="Telegram Rankova Studio Events">
+                <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19.98 4.204a.78.78 0 0 0-.547-.358L3.132 10.456a.78.78 0 0 0 .142 1.488l4.47 1.396 9.873-6.196a.276.276 0 0 1 .325.045.27.27 0 0 1 .012.336l-8.73 7.846v3.254a.78.78 0 0 0 1.398.53l2.843-2.618 4.416 3.498c.57.34.966.194 1.11-.532L20.33 4.887a.78.78 0 0 0-.35-.683z"/>
+                </svg>
+            </a>
+
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('Сторінка "Корисні Лінки Rankova Studio" оновлена. Instagram іконка замінена на PNG-зображення.');
+    });
+</script>
+
+</body>
+</html>
