@@ -199,8 +199,27 @@ button { font: inherit; color: inherit; }
 .actions { display: grid; gap: 8px; }
 .actions .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .pbright { display: flex; align-items: center; gap: 10px; }
+.summary .who { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; font-size: 14px; }
+.summary .who b { font-family: var(--font-body); font-size: 15px; }
+.sum-btns { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.panel.learn.small { max-width: 420px; padding-bottom: 0; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; }
+.row > * { flex: 1 1 140px; }
+input[type="text"] { font: inherit; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 10px; min-height: 46px; padding: 0 12px; width: 100%; box-sizing: border-box; }
+input[type="text"]:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.err { color: var(--bad); font-size: 13px; min-height: 18px; margin: 0; }
+.namebox { display: grid; gap: 8px; text-align: left; background: var(--sun-soft); border-radius: 12px; padding: 12px; }
+.board { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.board li { display: grid; grid-template-columns: 26px 1fr auto auto; gap: 10px; align-items: baseline; padding: 8px 6px; border-radius: 8px; font-variant-numeric: tabular-nums; }
+.board li:nth-child(odd) { background: var(--paper); }
+.board li.me { outline: 2px solid var(--sun); }
+.board .rk { color: var(--muted); font-weight: 600; }
+.board .nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+.board .st { color: var(--sun-deep); font-weight: 600; }
+.board .sc { font-family: var(--font-display); font-weight: 700; }
+.note { font-size: 12px; color: var(--muted); margin: 0; }
 .btn.help { min-height: 36px; width: 36px; padding: 0; border-radius: 50%; font-family: var(--font-display); font-size: 18px; }
-.summary .cheat { grid-column: 1 / -1; min-height: 44px; }
+.summary .cheat { min-height: 44px; }
 .overlay { position: fixed; inset: 0; z-index: 30; background: rgba(15, 13, 10, .55); display: flex; align-items: center; justify-content: center;
   padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); }
 .panel.learn { background: var(--card); color: var(--ink); border-radius: 20px; width: 100%; max-width: 520px; max-height: 100%; overflow-y: auto; box-sizing: border-box; display: grid; gap: 14px; padding: 18px 16px 0; }
@@ -260,7 +279,14 @@ button { font: inherit; color: inherit; }
         <p><b id="m-stars">0</b> <span class="muted">з <span id="m-stars-max">42</span> зірок</span> · <b id="m-score">0</b> <span class="muted">балів</span></p>
         <p class="muted" id="m-next">Почни з першого рівня.</p>
       </div>
-      <button class="btn cheat" id="m-cheat" type="button">Шпаргалка: ноти, інтервали, акорди</button>
+      <div class="who">
+        <span class="muted">Учень:</span> <b id="m-name">ім'я не вказано</b>
+        <button class="link" id="m-name-edit" type="button">Вказати ім'я</button>
+      </div>
+      <div class="sum-btns">
+        <button class="btn cheat" id="m-cheat" type="button">Шпаргалка</button>
+        <button class="btn cheat" id="m-board" type="button">Таблиця учнів</button>
+      </div>
     </section>
     <div id="worlds" style="display:grid; gap:20px"></div>
     <div class="map-foot">
@@ -318,6 +344,14 @@ button { font: inherit; color: inherit; }
       <div class="bigstars" id="r-stars"></div>
       <div class="chips" id="r-chips"></div>
       <ul class="tips" id="r-tips"></ul>
+      <form class="namebox" id="r-name" hidden novalidate>
+        <p>Впиши своє ім'я, щоб твій прогрес бачив викладач і ти потрапив у таблицю учнів.</p>
+        <div class="row">
+          <input type="text" id="r-name-input" maxlength="20" placeholder="Ім'я та перша літера прізвища" autocomplete="nickname" aria-label="Ім'я">
+          <button class="btn primary" type="submit">Зберегти</button>
+        </div>
+        <p class="err" id="r-name-err"></p>
+      </form>
       <div class="actions">
         <button class="btn primary" id="r-next" type="button">Наступний рівень</button>
         <div class="two">
@@ -328,6 +362,33 @@ button { font: inherit; color: inherit; }
       </div>
     </section>
   </main>
+</div>
+
+<div class="overlay" id="ov-name" hidden role="dialog" aria-modal="true" aria-labelledby="nm-title">
+  <div class="panel learn small">
+    <h2 id="nm-title">Як тебе звати?</h2>
+    <p class="muted">Ім'я бачитимуть викладач і інші учні в таблиці. Достатньо імені й першої літери прізвища, наприклад «Олеся К.».</p>
+    <form id="nm-form" class="row" novalidate>
+      <input type="text" id="nm-input" maxlength="20" placeholder="Ім'я" autocomplete="nickname" aria-label="Ім'я">
+      <button class="btn primary" type="submit">Зберегти</button>
+    </form>
+    <p class="err" id="nm-err"></p>
+    <button class="link" id="nm-cancel" type="button" style="margin-bottom:14px">Скасувати</button>
+  </div>
+</div>
+
+<div class="overlay" id="ov-board" hidden role="dialog" aria-modal="true" aria-labelledby="bd-title">
+  <div class="panel learn small">
+    <h2 id="bd-title">Таблиця учнів</h2>
+    <div class="seg" id="bd-period">
+      <button type="button" data-p="month" aria-pressed="true">Цей місяць</button>
+      <button type="button" data-p="all" aria-pressed="false">Весь час</button>
+    </div>
+    <p class="muted" id="bd-hint"></p>
+    <ol class="board" id="bd-list"></ol>
+    <p class="note" id="bd-note"></p>
+    <button class="btn" id="bd-close" type="button" style="margin-bottom:14px">Закрити</button>
+  </div>
 </div>
 
 <div class="overlay" id="ov-learn" hidden role="dialog" aria-modal="true" aria-labelledby="ln-title">
@@ -557,6 +618,9 @@ $('kb').addEventListener('pointerdown', e => {
 });
 window.addEventListener('keydown', e => {
   if (e.key === 'Escape' && !$('ov-learn').hidden) { closeLesson(); return; }
+  if (e.key === 'Escape') { $('ov-name').hidden = true; $('ov-board').hidden = true; return; }
+  const tag = (document.activeElement && document.activeElement.tagName) || '';
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
   if ($('v-play').hidden || !$('ov-learn').hidden || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.code in codeToMidi && !$('kbwrap').hidden) { e.preventDefault(); onKey(codeToMidi[e.code], keyEl(codeToMidi[e.code])); return; }
   const btns = [...$('t-answers').children];
@@ -564,6 +628,96 @@ window.addEventListener('keydown', e => {
   if (n !== undefined && btns[n] && !$('t-answers').hidden) { e.preventDefault(); btns[n].click(); }
   if (e.code === 'Space' && !$('t-listen').hidden) { e.preventDefault(); $('t-play').click(); }
 });
+
+/* ---------- Online progress (Firebase, shared with the studio's other games) ---------- */
+const IS_LIVE = /(^|\.)github\.io$/.test(location.hostname);
+const FIREBASE = {
+  apiKey: 'AIzaSyBkhOhr5tKOoxbyISjwPY7S9VEA0NpTrVY',
+  authDomain: 'rankovastudiodrumleaderboard.firebaseapp.com',
+  projectId: 'rankovastudiodrumleaderboard',
+  storageBucket: 'rankovastudiodrumleaderboard.appspot.com',
+  messagingSenderId: '93466705697',
+  appId: '1:93466705697:web:a90ef9bbf415a155860860'
+};
+const PROGRESS_COLLECTION = 'piano_progress';
+const NAME_RE = /^[\p{L}\p{N}][\p{L}\p{N} .'’\-]{1,19}$/u;
+let playerName = store.get('np_name', '');
+function monthKey() { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); }
+function monthScore() { const m = store.get('np_month', { month: '', score: 0 }); return m.month === monthKey() ? m.score : 0; }
+function addMonthScore(n) { store.set('np_month', { month: monthKey(), score: monthScore() + n }); }
+let fbPromise = null;
+function firebase() {
+  if (!fbPromise) {
+    const base = 'https://www.gstatic.com/firebasejs/10.12.2/';
+    fbPromise = Promise.all([import(base + 'firebase-app.js'), import(base + 'firebase-firestore.js'), import(base + 'firebase-auth.js')])
+      .then(async ([appM, fs, au]) => {
+        const app = appM.initializeApp(FIREBASE);
+        const auth = au.getAuth(app);
+        if (!auth.currentUser) await au.signInAnonymously(auth);
+        return { db: fs.getFirestore(app), fs, uid: auth.currentUser.uid };
+      });
+    fbPromise.catch(() => { fbPromise = null; });
+  }
+  return fbPromise;
+}
+function snapshot() {
+  const stars = {}; let totalStars = 0, totalScore = 0;
+  for (const id in progress) { stars[id] = progress[id].stars || 0; totalStars += stars[id]; totalScore += progress[id].score || 0; }
+  return { name: playerName, stars, totalStars, totalScore, month: monthKey(), monthScore: monthScore() };
+}
+async function syncProgress() {
+  if (!playerName) return;
+  if (!IS_LIVE) { store.set('np_board_local', [snapshot()]); return; }
+  try {
+    const { db, fs, uid } = await firebase();
+    await fs.setDoc(fs.doc(db, PROGRESS_COLLECTION, uid), { ...snapshot(), updated: fs.serverTimestamp() });
+  } catch (e) { console.warn('Progress sync failed', e); }
+}
+async function loadBoard(period) {
+  let rows;
+  if (!IS_LIVE) rows = store.get('np_board_local', []);
+  else {
+    const { db, fs } = await firebase();
+    const col = fs.collection(db, PROGRESS_COLLECTION);
+    const q = period === 'month' ? fs.query(col, fs.where('month', '==', monthKey()), fs.limit(500)) : fs.query(col, fs.orderBy('totalStars', 'desc'), fs.limit(100));
+    rows = (await fs.getDocs(q)).docs.map(d => d.data());
+  }
+  if (period === 'month') return rows.filter(r => r.month === monthKey() && r.monthScore > 0).sort((a, b) => b.monthScore - a.monthScore).slice(0, 20);
+  return rows.sort((a, b) => b.totalStars - a.totalStars || b.totalScore - a.totalScore).slice(0, 20);
+}
+let boardPeriod = 'month';
+async function renderBoard() {
+  [...$('bd-period').children].forEach(b => b.setAttribute('aria-pressed', String(b.dataset.p === boardPeriod)));
+  $('bd-hint').textContent = boardPeriod === 'month' ? 'Бали, набрані цього місяця. Що більше займаєшся, то вище.' : 'Усі зібрані зірки за весь час.';
+  const list = $('bd-list'); list.textContent = '';
+  const note = $('bd-note'); note.textContent = 'Завантажую…';
+  try {
+    const rows = await loadBoard(boardPeriod);
+    rows.forEach((r, i) => {
+      const li = mk('li', r.name === playerName ? 'me' : '');
+      li.append(mk('span', 'rk', (i + 1) + '.'), mk('span', 'nm', String(r.name || 'Учень')), mk('span', 'st', '★ ' + (r.totalStars || 0)), mk('span', 'sc', String(boardPeriod === 'month' ? r.monthScore : r.totalScore)));
+      list.appendChild(li);
+    });
+    note.textContent = rows.length ? '' : (boardPeriod === 'month' ? 'Цього місяця ще ніхто не грав. Будь першим!' : 'Ще немає результатів.');
+    if (!playerName) note.textContent += ' Щоб потрапити в таблицю, вкажи своє ім\'я на карті.';
+    if (!IS_LIVE) note.textContent += ' Тестовий режим: таблиця лише на цьому пристрої.';
+  } catch (e) { console.error(e); note.textContent = 'Таблиця тимчасово недоступна. Спробуй пізніше.'; }
+}
+function setName(raw, errEl) {
+  const name = raw.replace(/\s+/g, ' ').trim();
+  if (!NAME_RE.test(name)) { errEl.textContent = 'Ім\'я: від 2 до 20 букв або цифр.'; return false; }
+  errEl.textContent = '';
+  playerName = name; store.set('np_name', name); store.set('rk_name', name);
+  syncProgress(); renderMap();
+  return true;
+}
+$('m-name-edit').addEventListener('click', () => { $('nm-input').value = playerName; $('nm-err').textContent = ''; $('ov-name').hidden = false; $('nm-input').focus(); });
+$('nm-cancel').addEventListener('click', () => { $('ov-name').hidden = true; });
+$('nm-form').addEventListener('submit', e => { e.preventDefault(); if (setName($('nm-input').value, $('nm-err'))) $('ov-name').hidden = true; });
+$('r-name').addEventListener('submit', e => { e.preventDefault(); if (setName($('r-name-input').value, $('r-name-err'))) $('r-name').hidden = true; });
+$('m-board').addEventListener('click', () => { $('ov-board').hidden = false; renderBoard(); });
+$('bd-close').addEventListener('click', () => { $('ov-board').hidden = true; });
+$('bd-period').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; boardPeriod = b.dataset.p; renderBoard(); });
 
 /* ---------- Lessons and cheat sheet ---------- */
 function mk(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
@@ -1019,6 +1173,11 @@ function finishLevel() {
   const newBest = score > prev.score;
   progress[L.id] = { stars: Math.max(prev.stars, stars), score: Math.max(prev.score, score) };
   store.set('np_progress', progress);
+  addMonthScore(score);
+  syncProgress();
+  $('r-name').hidden = !!playerName;
+  $('r-name-input').value = store.get('rk_name', '');
+  $('r-name-err').textContent = '';
   $('r-level').textContent = 'Рівень ' + (li + 1) + ' · ' + L.title;
   $('r-title').textContent = stars === 3 ? 'Бездоганно!' : stars === 2 ? 'Чудово!' : stars === 1 ? 'Рівень пройдено!' : 'Майже! Спробуй ще раз';
   const st = $('r-stars'); st.textContent = ''; st.setAttribute('aria-label', stars + ' з 3 зірок');
@@ -1085,6 +1244,8 @@ function renderMap() {
     sec.append(head, tiles); box.appendChild(sec);
   });
   const t = totals();
+  $('m-name').textContent = playerName || 'ім\'я не вказано';
+  $('m-name-edit').textContent = playerName ? 'Змінити' : 'Вказати ім\'я';
   const mr = $('m-rays'); mr.textContent = '';
   const lit = Math.round(12 * t.stars / (LEVELS.length * 3));
   for (let i = 0; i < 12; i++) {
@@ -1100,6 +1261,7 @@ $('teacher').addEventListener('click', () => { teacher = !teacher; store.set('np
 
 if (location.hash === '#dev') window.__np = { get task() { return task; }, get answered() { return answered; }, get playing() { return playing; }, onKey, answerButton, LEVELS, startLevel };
 renderMap();
+if (playerName && Object.keys(progress).length) syncProgress();
 })();
 </script>
 
