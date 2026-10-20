@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Нотна пригода Rankova</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Гра Rankova Studio для фортепіано: читання нот, слух, інтервали й акорди в ігровій формі.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Jost:wght@500;600;700&display=swap">
+<style>
+/* Layout: phone-first app with three screens. Map (worlds of level tiles), Play (sun + score bar, task card with a staff, keyboard or answer buttons), Result. Same family as the studio's other games. */
+@font-face { font-family: 'Rankova Clefs'; src: url(data:font/woff2;base64,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) format('woff2'); font-display: block; }
+:root {
+  --paper: #fbfaf6;
+  --card: #ffffff;
+  --ink: #1d1b17;
+  --muted: #6b665b;
+  --line: #e6e1d4;
+  --sun: #f4cc35;
+  --sun-deep: #b38a00;
+  --sun-soft: #fbedb4;
+  --on-sun: #1d1b17;
+  --accent: #5b58d8;
+  --good: #2f9e5e;
+  --good-soft: #d8f1e2;
+  --bad: #d64545;
+  --bad-soft: #f8dcdc;
+  --key-white: #ffffff;
+  --key-black: #1d1b17;
+  --staff: #1d1b17;
+  --font-display: 'Jost', 'Futura', 'Century Gothic', system-ui, sans-serif;
+  --font-body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #13120f; --card: #1c1b17; --ink: #f2eee4; --muted: #a59f92; --line: #2e2b25;
+    --sun-deep: #f4cc35; --sun-soft: #3a3218; --accent: #8b88f0; --good: #4cc47e; --good-soft: #17301f; --bad: #ef6b6b; --bad-soft: #3a1c1c;
+    --key-white: #f2eee4; --key-black: #0b0a08; --staff: #f2eee4; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #13120f; --card: #1c1b17; --ink: #f2eee4; --muted: #a59f92; --line: #2e2b25;
+  --sun-deep: #f4cc35; --sun-soft: #3a3218; --accent: #8b88f0; --good: #4cc47e; --good-soft: #17301f; --bad: #ef6b6b; --bad-soft: #3a1c1c;
+  --key-white: #f2eee4; --key-black: #0b0a08; --staff: #f2eee4; color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.45; -webkit-tap-highlight-color: transparent; }
+.app {
+  max-width: 560px; margin: 0 auto; min-height: 100%;
+  display: flex; flex-direction: column; gap: 14px;
+  padding-block: 12px 24px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  box-sizing: border-box;
+}
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.top img { height: 36px; width: auto; display: block; }
+:root[data-theme="dark"] .top img { filter: brightness(0) invert(.92); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .top img { filter: brightness(0) invert(.92); } }
+.top .name { text-align: right; }
+.eyebrow { font-family: var(--font-display); font-weight: 600; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; margin: 0; text-wrap: balance; }
+.top h1 { font-size: 22px; line-height: 1.1; letter-spacing: .02em; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+button { font: inherit; color: inherit; }
+.btn {
+  appearance: none; border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  border-radius: 14px; min-height: 48px; padding: 0 16px; font: 600 15px/1.2 var(--font-body); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; text-align: center; box-sizing: border-box;
+}
+.btn.primary { background: var(--sun); border-color: var(--sun); color: var(--on-sun); font-family: var(--font-display); font-size: 17px; letter-spacing: .02em; }
+.btn:disabled { opacity: .45; cursor: default; }
+.btn:focus-visible, .tile:focus-visible, .key:focus-visible, .link:focus-visible, .ans:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.link { appearance: none; border: 0; background: none; color: var(--muted); font-size: 14px; cursor: pointer; padding: 4px 0; text-decoration: underline; text-underline-offset: 3px; }
+.link:hover { color: var(--ink); }
+.back { color: var(--muted); font-size: 13px; text-decoration: none; }
+.back:hover { color: var(--ink); text-decoration: underline; }
+
+/* ---------- Map ---------- */
+.summary { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px; }
+.summary svg { width: 56px; height: 56px; }
+.summary b { font-family: var(--font-display); font-size: 20px; font-variant-numeric: tabular-nums; }
+.world { display: grid; gap: 10px; }
+.world-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.world-head h2 { font-size: 20px; }
+.world-head span { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.tile {
+  appearance: none; text-align: left; cursor: pointer; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px;
+  padding: 10px 12px; display: grid; grid-template-columns: 34px 1fr; gap: 2px 10px; align-items: center; min-width: 0; min-height: 64px;
+}
+.tile .n { grid-row: span 2; width: 34px; height: 34px; border-radius: 50%; background: var(--sun-soft); display: grid; place-items: center; font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+.tile .t { font-weight: 600; font-size: 14px; line-height: 1.2; min-width: 0; }
+.tile .s { font-size: 13px; letter-spacing: 2px; color: var(--line); line-height: 1; }
+.tile .s .on { color: var(--sun); }
+.tile.next { border-color: var(--sun); }
+.tile.next .n { background: var(--sun); color: var(--on-sun); }
+.tile.locked { cursor: default; opacity: .55; }
+.tile.locked .n { background: var(--line); color: var(--muted); }
+.map-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+/* ---------- Play ---------- */
+.playbar { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+.playbar .lvl { min-width: 0; }
+.playbar .lvl b { display: block; font-family: var(--font-display); font-size: 17px; line-height: 1.15; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.steps { display: grid; grid-auto-flow: column; gap: 3px; margin-top: 6px; }
+.steps i { height: 5px; border-radius: 3px; background: var(--line); }
+.steps i.ok { background: var(--good); }
+.steps i.bad { background: var(--bad); }
+.steps i.now { background: var(--sun); }
+.sunbox { display: grid; justify-items: center; gap: 0; }
+.sunbox svg { width: 54px; height: 40px; overflow: visible; }
+.sunbox .ray { stroke: var(--line); stroke-width: 3; stroke-linecap: round; transition: stroke .2s; }
+.sunbox .ray.on { stroke: var(--sun); }
+.sunbox .disc { fill: var(--sun-soft); stroke: var(--sun); stroke-width: 3; }
+.sunbox.blaze .disc { fill: var(--sun); }
+.sunbox small { font-family: var(--font-display); font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; color: var(--sun-deep); min-height: 16px; line-height: 16px; }
+.score { text-align: right; }
+.score small { display: block; font-size: 11px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+.score output { font-family: var(--font-display); font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums; }
+
+.task { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 16px; display: grid; gap: 12px; }
+.prompt { font-family: var(--font-display); font-weight: 600; font-size: 20px; line-height: 1.2; text-align: center; text-wrap: balance; }
+.staff { width: 100%; max-width: 380px; height: auto; margin: 0 auto; display: block; }
+.staff .ln { stroke: var(--staff); stroke-width: 1.4; }
+.staff .clef { font-family: 'Rankova Clefs', serif; fill: var(--staff); }
+.staff .head { fill: var(--staff); }
+.staff .hole { fill: var(--card); }
+.staff .note.ok .head { fill: var(--good); }
+.staff .note.bad .head { fill: var(--bad); }
+.staff .note.ghost .head { fill: var(--good); opacity: .9; }
+.staff .note { transition: transform .35s cubic-bezier(.2,.9,.3,1); }
+.listen { display: grid; justify-items: center; gap: 8px; padding: 6px 0; }
+.listen .play {
+  width: 88px; height: 88px; border-radius: 50%; border: 0; cursor: pointer; background: var(--sun); color: var(--on-sun);
+  display: grid; place-items: center; box-shadow: 0 0 0 0 rgba(244,204,53,.6);
+}
+.listen .play svg { width: 36px; height: 36px; }
+.listen .play.sounding { animation: ring 1s ease-out infinite; }
+@keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(244,204,53,.6); } 100% { box-shadow: 0 0 0 18px rgba(244,204,53,0); } }
+.listen small { color: var(--muted); font-size: 13px; }
+.seq { display: flex; justify-content: center; gap: 8px; min-height: 28px; }
+.seq i { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line); box-sizing: border-box; display: grid; place-items: center; font-style: normal; font-size: 11px; font-weight: 600; }
+.seq i.ok { background: var(--good); border-color: var(--good); color: #fff; }
+.seq i.bad { background: var(--bad); border-color: var(--bad); color: #fff; }
+.feedback { min-height: 44px; display: grid; place-items: center; text-align: center; border-radius: 12px; padding: 8px 12px; font-weight: 600; font-size: 16px; }
+.feedback.ok { background: var(--good-soft); color: var(--good); }
+.feedback.bad { background: var(--bad-soft); color: var(--bad); }
+.feedback small { display: block; font-weight: 500; font-size: 13px; opacity: .85; }
+.feedback .plus { font-family: var(--font-display); }
+
+.answers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.answers.three { grid-template-columns: repeat(3, 1fr); }
+.ans {
+  appearance: none; cursor: pointer; border: 1.5px solid var(--line); background: var(--card); border-radius: 14px;
+  min-height: 56px; padding: 8px; font: 600 16px/1.2 var(--font-body); display: grid; place-items: center; gap: 2px; text-align: center;
+}
+.ans small { font-weight: 500; font-size: 12px; color: var(--muted); }
+.ans.ok { background: var(--good-soft); border-color: var(--good); }
+.ans.bad { background: var(--bad-soft); border-color: var(--bad); }
+.ans.show { border-color: var(--good); border-style: dashed; }
+
+/* keyboard */
+.kbwrap { position: relative; }
+.kb { position: relative; display: flex; height: 168px; user-select: none; -webkit-user-select: none; touch-action: none; }
+.key { appearance: none; border: 0; padding: 0; cursor: pointer; position: relative; }
+.key.w { flex: 1 1 0; min-width: 0; background: var(--key-white); border: 1px solid var(--line); border-top: 0; border-radius: 0 0 8px 8px; margin-right: -1px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 8px; box-shadow: inset 0 -4px 0 rgba(0,0,0,.06); }
+.key.b { position: absolute; top: 0; height: 60%; background: var(--key-black); border-radius: 0 0 6px 6px; z-index: 2; box-shadow: inset 0 -3px 0 rgba(255,255,255,.12); }
+.key .lab { font-size: 12px; font-weight: 600; color: #3a3830; pointer-events: none; }
+.key .kk { font-size: 10px; color: #8a857a; pointer-events: none; text-transform: uppercase; }
+.key.down.w { background: #efe9da; }
+.key.down.b { background: #3a3830; }
+.key.ok { background: var(--good) !important; }
+.key.ok .lab { color: #fff; }
+.key.bad { background: var(--bad) !important; }
+.key.bad .lab { color: #fff; }
+.key.show::after { content: ''; position: absolute; left: 50%; bottom: 48px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; background: var(--good); animation: blink .45s ease-in-out 4 alternate; }
+.key.b.show::after { bottom: 10px; }
+@keyframes blink { to { opacity: .2; } }
+.kb.locked .key { cursor: default; }
+.kbhint { font-size: 12px; color: var(--muted); text-align: center; }
+@media (hover: none) { .kbhint, .key .kk { display: none; } }
+
+/* ---------- Result ---------- */
+.result { background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 22px 18px; display: grid; gap: 16px; text-align: center; }
+.result h2 { font-size: 28px; }
+.bigstars { font-size: 46px; letter-spacing: 6px; color: var(--line); line-height: 1; }
+.bigstars .on { color: var(--sun); }
+.chips { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.chip { border-radius: 12px; background: var(--paper); border: 1px solid var(--line); padding: 8px; }
+.chip small { display: block; font-size: 11px; color: var(--muted); }
+.chip b { font-family: var(--font-display); font-size: 20px; font-variant-numeric: tabular-nums; }
+.tips { margin: 0; padding: 12px 14px; border-radius: 12px; background: var(--sun-soft); display: grid; gap: 6px; list-style: none; text-align: left; font-size: 14px; }
+.actions { display: grid; gap: 8px; }
+.actions .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.fade { animation: fade .3s ease both; }
+@keyframes fade { from { opacity: .001; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 370px) {
+  .tiles { grid-template-columns: 1fr; }
+  .kb { height: 150px; }
+  .prompt { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade, .listen .play.sounding, .key.show::after { animation: none; }
+  .staff .note, .sunbox .ray { transition: none; }
+}
+</style>
+
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <img src="rankova-logo.png" alt="Rankova Studio" width="88" height="36">
+    <div class="name">
+      <div class="eyebrow">Сольфеджіо · фортепіано</div>
+      <h1>Нотна пригода</h1>
+    </div>
+  </header>
+
+  <!-- MAP -->
+  <main id="v-map" class="fade" style="display:grid; gap:18px">
+    <section class="summary">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M14 44 A18 18 0 0 1 50 44" fill="var(--sun-soft)" stroke="var(--sun)" stroke-width="4"/>
+        <line x1="8" y1="44" x2="56" y2="44" stroke="var(--sun)" stroke-width="4" stroke-linecap="round"/>
+        <g stroke="var(--sun)" stroke-width="4" stroke-linecap="round"><line x1="32" y1="18" x2="32" y2="10"/><line x1="17" y1="24" x2="12" y2="19"/><line x1="47" y1="24" x2="52" y2="19"/></g>
+      </svg>
+      <div>
+        <p><b id="m-stars">0</b> <span class="muted">з <span id="m-stars-max">42</span> зірок</span> · <b id="m-score">0</b> <span class="muted">балів</span></p>
+        <p class="muted" id="m-next">Почни з першого рівня.</p>
+      </div>
+    </section>
+    <div id="worlds" style="display:grid; gap:20px"></div>
+    <div class="map-foot">
+      <a class="back" href="https://max-vorozhko.github.io/rankova_usefull/">← Усі ігри Rankova Studio</a>
+      <button class="link" id="teacher" type="button">Я викладач: відкрити всі рівні</button>
+    </div>
+  </main>
+
+  <!-- PLAY -->
+  <main id="v-play" hidden style="display:grid; gap:12px">
+    <div class="playbar">
+      <button class="btn" id="p-exit" type="button" aria-label="До карти рівнів" style="min-height:40px; padding:0 12px">←</button>
+      <div class="lvl">
+        <b id="p-title"></b>
+        <div class="steps" id="p-steps"></div>
+      </div>
+      <div class="score"><small>Бали</small><output id="p-score">0</output></div>
+    </div>
+    <div class="sunbox" id="sunbox" aria-hidden="true">
+      <svg viewBox="-30 -26 60 32">
+        <g id="rays"></g>
+        <path class="disc" d="M-12 0 A12 12 0 0 1 12 0 Z"/>
+        <line x1="-28" y1="0" x2="28" y2="0" stroke="var(--sun)" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <small id="p-combo"></small>
+    </div>
+    <section class="task">
+      <p class="prompt" id="t-prompt"></p>
+      <svg class="staff" id="t-staff" viewBox="0 6 280 98" role="img" aria-label="Нотний стан"></svg>
+      <div class="listen" id="t-listen" hidden>
+        <button class="play" id="t-play" type="button" aria-label="Послухати ще раз">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <small id="t-listen-note">Натисни, щоб послухати ще раз</small>
+      </div>
+      <div class="seq" id="t-seq" hidden></div>
+      <div class="answers" id="t-answers" hidden></div>
+      <div class="feedback" id="t-fb" role="status" aria-live="polite"></div>
+    </section>
+    <div class="kbwrap" id="kbwrap">
+      <div class="kb" id="kb" role="group" aria-label="Клавіатура фортепіано"></div>
+    </div>
+    <p class="kbhint" id="kbhint">Можна грати з клавіатури комп'ютера: A S D F G H J K, чорні клавіші на рядок вище (W E T Y U).</p>
+  </main>
+
+  <!-- RESULT -->
+  <main id="v-result" hidden>
+    <section class="result fade">
+      <div>
+        <div class="eyebrow" id="r-level"></div>
+        <h2 id="r-title"></h2>
+      </div>
+      <div class="bigstars" id="r-stars"></div>
+      <div class="chips" id="r-chips"></div>
+      <ul class="tips" id="r-tips"></ul>
+      <div class="actions">
+        <button class="btn primary" id="r-next" type="button">Наступний рівень</button>
+        <div class="two">
+          <button class="btn" id="r-again" type="button">Ще раз</button>
+          <button class="btn" id="r-map" type="button">Карта рівнів</button>
+        </div>
+        <a class="btn" href="https://n813529.alteg.io/?utm_source=games&amp;utm_medium=piano_solfege" target="_blank" rel="noopener">Записатись на урок фортепіано</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } }
+};
+const rnd = n => Math.floor(Math.random() * n);
+const pick = a => a[rnd(a.length)];
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+/* ---------- Music theory ---------- */
+const NAMES = ['До', 'До♯', 'Ре', 'Ре♯', 'Мі', 'Фа', 'Фа♯', 'Соль', 'Соль♯', 'Ля', 'Ля♯', 'Сі'];
+const LETTER = [0, -1, 1, -1, 2, 3, -1, 4, -1, 5, -1, 6];
+const OCT = { 2: 'великої октави', 3: 'малої октави', 4: 'першої октави', 5: 'другої октави', 6: 'третьої октави' };
+const isWhite = m => LETTER[m % 12] >= 0;
+const octave = m => Math.floor(m / 12) - 1;
+const nm = m => NAMES[m % 12];
+const fullName = m => nm(m) + ' ' + (OCT[octave(m)] || '');
+const diat = m => LETTER[m % 12] + 7 * octave(m);
+const whitesIn = (lo, hi) => { const a = []; for (let m = lo; m <= hi; m++) if (isWhite(m)) a.push(m); return a; };
+const C3 = 48, C4 = 60, C5 = 72;
+const INTERVAL_NAMES = { 1: 'мала секунда', 2: 'велика секунда', 3: 'мала терція', 4: 'велика терція', 5: 'чиста кварта', 7: 'чиста квінта', 12: 'чиста октава' };
+const INTERVAL_GROUPS = {
+  second: { label: 'Секунда', hint: 'сусідні звуки', st: [1, 2] },
+  third: { label: 'Терція', hint: 'через одну', st: [3, 4] },
+  fourth: { label: 'Кварта', hint: '4 ступені', st: [5] },
+  fifth: { label: 'Квінта', hint: 'порожня, відкрита', st: [7] },
+  octave: { label: 'Октава', hint: 'та сама нота вище', st: [12] }
+};
+
+/* ---------- Levels ----------
+   type: read (note on staff -> key), hl (higher/lower), ear (find by ear), echo (repeat 3 notes),
+         interval, chord, mix. kb: keyboard range. labels: 'all' | 'c' | 'none'. */
+const WORLDS = [
+  { id: 'treble', title: 'Скрипковий ключ', levels: [
+    { id: 'r1', title: 'До, Ре, Мі', type: 'read', clef: 'treble', notes: [60, 62, 64], kb: [60, 71], labels: 'all', intro: 'Знайди ноту на клавіатурі' },
+    { id: 'r2', title: 'Від До до Соль', type: 'read', clef: 'treble', notes: whitesIn(60, 67), kb: [60, 71], labels: 'c', intro: 'Знайди ноту на клавіатурі' },
+    { id: 'r3', title: 'Уся перша октава', type: 'read', clef: 'treble', notes: whitesIn(60, 72), kb: [60, 72], labels: 'none', intro: 'Знайди ноту на клавіатурі' },
+    { id: 'r4', title: 'Друга октава', type: 'read', clef: 'treble', notes: whitesIn(64, 79), kb: [60, 79], labels: 'none', intro: 'Знайди ноту на клавіатурі' }
+  ] },
+  { id: 'ear', title: 'Слух', levels: [
+    { id: 'e1', title: 'Вище чи нижче?', type: 'hl', intro: 'Другий звук вище чи нижче?' },
+    { id: 'e2', title: 'Знайди ноту на слух', type: 'ear', notes: whitesIn(60, 67), kb: [60, 71], labels: 'all', intro: 'Спершу звучить До, потім загадана нота. Знайди її' },
+    { id: 'e3', title: 'Луна', type: 'echo', notes: whitesIn(60, 67), kb: [60, 71], labels: 'all', intro: 'Повтори мелодію з 3 нот' },
+    { id: 'e4', title: 'Уся октава на слух', type: 'ear', notes: whitesIn(60, 72), kb: [60, 72], labels: 'c', intro: 'Спершу звучить До, потім загадана нота. Знайди її' }
+  ] },
+  { id: 'harmony', title: 'Гармонія', levels: [
+    { id: 'h1', title: 'Терція, квінта, октава', type: 'interval', groups: ['third', 'fifth', 'octave'], intro: 'Який інтервал прозвучав?' },
+    { id: 'h2', title: 'Усі інтервали', type: 'interval', groups: ['second', 'third', 'fourth', 'fifth', 'octave'], intro: 'Який інтервал прозвучав?' },
+    { id: 'h3', title: 'Мажор чи мінор?', type: 'chord', intro: 'Акорд звучить світло чи сумно?' }
+  ] },
+  { id: 'bass', title: 'Басовий ключ і фінал', levels: [
+    { id: 'b1', title: 'Басовий ключ', type: 'read', clef: 'bass', notes: whitesIn(48, 55), kb: [48, 60], labels: 'c', intro: 'Знайди ноту на клавіатурі' },
+    { id: 'b2', title: 'Мала октава', type: 'read', clef: 'bass', notes: whitesIn(43, 60), kb: [43, 60], labels: 'none', intro: 'Знайди ноту на клавіатурі' },
+    { id: 'f1', title: 'Фінал: усе разом', type: 'mix', intro: '' }
+  ] }
+];
+const LEVELS = WORLDS.flatMap(w => w.levels);
+const TASKS_PER_LEVEL = 12;
+
+/* ---------- Progress ---------- */
+let progress = store.get('np_progress', {});      // { levelId: { stars, score } }
+let teacher = store.get('np_teacher', false);
+function unlocked(i) { return teacher || i === 0 || (progress[LEVELS[i - 1].id] && progress[LEVELS[i - 1].id].stars > 0); }
+function totals() {
+  let stars = 0, score = 0;
+  for (const id in progress) { stars += progress[id].stars || 0; score += progress[id].score || 0; }
+  return { stars, score };
+}
+
+/* ---------- Audio: simple synthesized piano ---------- */
+let ctx = null, master;
+function ensureCtx() {
+  if (ctx) return ctx;
+  const AC = window.AudioContext || window.webkitAudioContext;
+  ctx = new AC({ latencyHint: 'interactive' });
+  const comp = ctx.createDynamicsCompressor(); comp.connect(ctx.destination);
+  master = ctx.createGain(); master.gain.value = 0.8; master.connect(comp);
+  return ctx;
+}
+function hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+function piano(m, t, dur, vel) {
+  ensureCtx();
+  t = t === undefined ? ctx.currentTime : t; dur = dur || 1.4; vel = vel || 0.5;
+  const f = hz(m);
+  const out = ctx.createGain();
+  const lp = ctx.createBiquadFilter(); lp.type = 'lowpass';
+  lp.frequency.setValueAtTime(Math.min(9000, f * 9), t); lp.frequency.exponentialRampToValueAtTime(Math.max(600, f * 2.2), t + 0.6);
+  out.gain.setValueAtTime(0.0001, t);
+  out.gain.exponentialRampToValueAtTime(vel, t + 0.006);
+  out.gain.exponentialRampToValueAtTime(vel * 0.35, t + 0.25);
+  out.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+  [[1, 'triangle', 1], [2, 'sine', 0.35], [3, 'sine', 0.14], [4, 'sine', 0.06]].forEach(([mul, type, g]) => {
+    const o = ctx.createOscillator(); o.type = type; o.frequency.value = f * mul; o.detune.value = (Math.random() - 0.5) * 4;
+    const gg = ctx.createGain(); gg.gain.value = g;
+    o.connect(gg); gg.connect(lp); o.start(t); o.stop(t + dur + 0.05);
+  });
+  lp.connect(out); out.connect(master);
+}
+function thud(t) {
+  ensureCtx(); t = t === undefined ? ctx.currentTime : t;
+  const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'square'; o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(70, t + 0.15);
+  g.gain.setValueAtTime(0.08, t); g.gain.exponentialRampToValueAtTime(0.0008, t + 0.18); o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.2);
+}
+function chime(t) { ensureCtx(); t = t === undefined ? ctx.currentTime : t; piano(96, t, 0.5, 0.12); piano(100, t + 0.07, 0.5, 0.1); }
+
+/* ---------- Staff ---------- */
+const SVGNS = 'http://www.w3.org/2000/svg';
+const STAFF = { top: 30, gap: 12, x0: 6, x1: 274, noteX: 180 };
+const CLEF = { treble: { bottom: 30, glyph: '\u{1D11E}', size: 62, y: 4 }, bass: { bottom: 18, glyph: '\u{1D122}', size: 50, y: 1 } };
+function el(tag, attrs, parent) { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+function staffY(clef, m) { const b = CLEF[clef].bottom; const bottomY = STAFF.top + 4 * STAFF.gap; return bottomY - (diat(m) - b) * (STAFF.gap / 2); }
+function drawStaff(clef) {
+  const s = $('t-staff'); s.textContent = '';
+  for (let i = 0; i < 5; i++) el('line', { class: 'ln', x1: STAFF.x0, x2: STAFF.x1, y1: STAFF.top + i * STAFF.gap, y2: STAFF.top + i * STAFF.gap }, s);
+  el('line', { class: 'ln', x1: STAFF.x0, x2: STAFF.x0, y1: STAFF.top, y2: STAFF.top + 4 * STAFF.gap }, s);
+  const c = CLEF[clef];
+  const t = el('text', { class: 'clef', x: STAFF.x0 + 6, y: STAFF.top + 3 * STAFF.gap + c.y, 'font-size': c.size }, s);
+  t.textContent = c.glyph;
+  return s;
+}
+function drawNote(clef, m, cls, x) {
+  const s = $('t-staff');
+  const g = el('g', { class: 'note ' + (cls || '') }, s);
+  const y = staffY(clef, m);
+  const bottom = CLEF[clef].bottom, top = bottom + 8, d = diat(m);
+  const nx = x || STAFF.noteX;
+  // ledger lines below
+  for (let dd = bottom - 2; dd >= d; dd -= 2) { const ly = STAFF.top + 4 * STAFF.gap - (dd - bottom) * STAFF.gap / 2; el('line', { class: 'ln', x1: nx - 15, x2: nx + 15, y1: ly, y2: ly }, g); }
+  // ledger lines above
+  for (let dd = top + 2; dd <= d; dd += 2) { const ly = STAFF.top + 4 * STAFF.gap - (dd - bottom) * STAFF.gap / 2; el('line', { class: 'ln', x1: nx - 15, x2: nx + 15, y1: ly, y2: ly }, g); }
+  el('ellipse', { class: 'head', cx: nx, cy: y, rx: 8.6, ry: 6.2, transform: `rotate(-18 ${nx} ${y})` }, g);
+  el('ellipse', { class: 'hole', cx: nx, cy: y, rx: 4.6, ry: 2.6, transform: `rotate(-50 ${nx} ${y})` }, g);
+  return g;
+}
+
+/* ---------- Keyboard ---------- */
+const KEYMAP_WHITE = ['KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote'];
+const KEYMAP_UPPER = ['KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft'];  // black key right of white i
+let kbRange = null, codeToMidi = {};
+function renderKeyboard(lo, hi, labels) {
+  const kb = $('kb'); kb.textContent = '';
+  kbRange = [lo, hi]; codeToMidi = {};
+  const whites = whitesIn(lo, hi);
+  const w = 100 / whites.length;
+  whites.forEach((m, i) => {
+    const k = document.createElement('button');
+    k.type = 'button'; k.className = 'key w'; k.dataset.m = m;
+    k.setAttribute('aria-label', fullName(m));
+    const showLab = labels === 'all' || (labels === 'c' && m % 12 === 0);
+    if (showLab) { const s = document.createElement('span'); s.className = 'lab'; s.textContent = nm(m); k.appendChild(s); }
+    const code = KEYMAP_WHITE[i];
+    if (code) { codeToMidi[code] = m; const kk = document.createElement('span'); kk.className = 'kk'; kk.textContent = code.replace('Key', '').replace('Semicolon', ';').replace('Quote', "'"); k.appendChild(kk); }
+    kb.appendChild(k);
+  });
+  for (let m = lo; m <= hi; m++) {
+    if (isWhite(m)) continue;
+    const leftWhite = whites.indexOf(m - 1);
+    if (leftWhite < 0) continue;
+    const k = document.createElement('button');
+    k.type = 'button'; k.className = 'key b'; k.dataset.m = m;
+    k.setAttribute('aria-label', fullName(m));
+    k.style.left = ((leftWhite + 1) * w - w * 0.3) + '%';
+    k.style.width = (w * 0.6) + '%';
+    const code = KEYMAP_UPPER[leftWhite];
+    if (code) codeToMidi[code] = m;
+    kb.appendChild(k);
+  }
+  $('kbwrap').hidden = false;
+  $('kbhint').hidden = false;
+}
+function hideKeyboard() { $('kbwrap').hidden = true; $('kbhint').hidden = true; }
+function keyEl(m) { return $('kb').querySelector('[data-m="' + m + '"]'); }
+function flashKey(m, cls, ms) { const k = keyEl(m); if (!k) return; k.classList.add(cls); setTimeout(() => k.classList.remove(cls), ms || 600); }
+$('kb').addEventListener('pointerdown', e => {
+  const k = e.target.closest('.key'); if (!k) return;
+  e.preventDefault();
+  onKey(+k.dataset.m, k);
+});
+window.addEventListener('keydown', e => {
+  if ($('v-play').hidden || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.code in codeToMidi && !$('kbwrap').hidden) { e.preventDefault(); onKey(codeToMidi[e.code], keyEl(codeToMidi[e.code])); return; }
+  const btns = [...$('t-answers').children];
+  const n = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Digit5: 4 }[e.code];
+  if (n !== undefined && btns[n] && !$('t-answers').hidden) { e.preventDefault(); btns[n].click(); }
+  if (e.code === 'Space' && !$('t-listen').hidden) { e.preventDefault(); $('t-play').click(); }
+});
+
+/* ---------- Sun / combo ---------- */
+const raysG = $('rays');
+for (let i = 0; i < 10; i++) {
+  const a = Math.PI + (i + 0.5) * Math.PI / 10;
+  el('line', { class: 'ray', x1: Math.cos(a) * 16, y1: Math.sin(a) * 16, x2: Math.cos(a) * 24, y2: Math.sin(a) * 24 }, raysG);
+}
+function multFor(c) { return c >= 10 ? 3 : c >= 5 ? 2 : 1; }
+function renderSun(combo) {
+  [...raysG.children].forEach((r, i) => r.classList.toggle('on', i < Math.min(10, combo)));
+  $('sunbox').classList.toggle('blaze', combo >= 10);
+  $('p-combo').textContent = combo >= 5 ? 'Комбо ×' + multFor(combo) : combo > 0 ? combo + ' поспіль' : '';
+}
+
+/* ---------- Task generation ---------- */
+function makeTask(L, prev) {
+  const t = L.type === 'mix' ? pick(['read', 'readbass', 'ear', 'interval', 'chord']) : L.type;
+  if (t === 'read' || t === 'readbass') {
+    const src = t === 'readbass' ? LEVELS.find(x => x.id === 'b2') : (L.type === 'mix' ? LEVELS.find(x => x.id === 'r4') : L);
+    let m; do { m = pick(src.notes); } while (prev && prev.m === m && src.notes.length > 1);
+    return { kind: 'read', clef: src.clef, m, kb: src.kb, labels: L.type === 'mix' ? 'none' : src.labels, prompt: src.intro };
+  }
+  if (t === 'hl') {
+    const pool = whitesIn(60, 72); let a, b;
+    do { a = pick(pool); b = pick(pool); } while (Math.abs(a - b) < 2);
+    return { kind: 'hl', a, b, prompt: L.intro };
+  }
+  if (t === 'ear') {
+    const src = L.type === 'mix' ? LEVELS.find(x => x.id === 'e4') : L;
+    let m; do { m = pick(src.notes); } while (prev && prev.m === m);
+    return { kind: 'ear', m, kb: src.kb, labels: L.type === 'mix' ? 'c' : src.labels, prompt: src.intro };
+  }
+  if (t === 'echo') {
+    const seq = []; while (seq.length < 3) { const m = pick(L.notes); if (seq[seq.length - 1] !== m) seq.push(m); }
+    return { kind: 'echo', seq, kb: L.kb, labels: L.labels, prompt: L.intro, pos: 0 };
+  }
+  if (t === 'interval') {
+    const groups = L.type === 'mix' ? LEVELS.find(x => x.id === 'h2').groups : L.groups;
+    const g = pick(groups); const st = pick(INTERVAL_GROUPS[g].st);
+    const root = pick(whitesIn(57, 67));
+    return { kind: 'interval', groups, g, st, root, prompt: 'Який інтервал прозвучав?' };
+  }
+  if (t === 'chord') {
+    const root = pick(whitesIn(57, 67)); const major = Math.random() < 0.5;
+    return { kind: 'chord', root, major, prompt: 'Акорд звучить світло чи сумно?' };
+  }
+}
+
+/* ---------- Game state ---------- */
+let L = null, li = 0, tasks = 0, results = [], score = 0, combo = 0, maxCombo = 0, task = null, answered = false, shownAt = 0, confusions = {}, playing = false;
+
+function show(view) {
+  ['v-map', 'v-play', 'v-result'].forEach(v => { $(v).hidden = v !== view; });
+  window.scrollTo({ top: 0 });
+}
+
+function startLevel(i) {
+  ensureCtx(); if (ctx.state !== 'running') ctx.resume();
+  li = i; L = LEVELS[i];
+  tasks = 0; results = []; score = 0; combo = 0; maxCombo = 0; confusions = {};
+  $('p-title').textContent = (i + 1) + '. ' + L.title;
+  $('p-steps').innerHTML = Array.from({ length: TASKS_PER_LEVEL }, () => '<i></i>').join('');
+  $('p-score').textContent = '0';
+  renderSun(0);
+  show('v-play');
+  nextTask();
+}
+
+function setStep() {
+  [...$('p-steps').children].forEach((s, i) => { s.className = i < results.length ? (results[i] ? 'ok' : 'bad') : i === results.length ? 'now' : ''; });
+}
+
+async function nextTask() {
+  if (tasks >= TASKS_PER_LEVEL) { finishLevel(); return; }
+  task = makeTask(L, task);
+  answered = false;
+  setStep();
+  const fb = $('t-fb'); fb.className = 'feedback'; fb.textContent = '';
+  $('t-prompt').textContent = task.prompt;
+  $('t-seq').hidden = true; $('t-answers').hidden = true; $('t-listen').hidden = true;
+  $('t-answers').className = 'answers';
+  const staff = $('t-staff');
+  if (task.kind === 'read') {
+    staff.style.display = '';
+    drawStaff(task.clef);
+    const g = drawNote(task.clef, task.m);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      g.style.transform = 'translateX(80px)'; g.style.opacity = '0';
+      requestAnimationFrame(() => requestAnimationFrame(() => { g.style.transform = ''; g.style.opacity = '1'; }));
+    }
+    renderKeyboard(task.kb[0], task.kb[1], task.labels);
+    shownAt = performance.now();
+    return;
+  }
+  staff.style.display = 'none';
+  $('t-listen').hidden = false;
+  if (task.kind === 'ear' || task.kind === 'echo') {
+    renderKeyboard(task.kb[0], task.kb[1], task.labels);
+    if (task.kind === 'echo') { const s = $('t-seq'); s.hidden = false; s.innerHTML = task.seq.map(() => '<i></i>').join(''); }
+  } else {
+    hideKeyboard();
+    const box = $('t-answers'); box.hidden = false; box.textContent = '';
+    let opts;
+    if (task.kind === 'hl') opts = [{ v: 'up', t: 'Вище', s: '↑' }, { v: 'down', t: 'Нижче', s: '↓' }];
+    if (task.kind === 'chord') opts = [{ v: true, t: 'Мажор', s: 'світло' }, { v: false, t: 'Мінор', s: 'сумно' }];
+    if (task.kind === 'interval') opts = task.groups.map(g => ({ v: g, t: INTERVAL_GROUPS[g].label, s: INTERVAL_GROUPS[g].hint }));
+    if (opts.length === 3) box.classList.add('three');
+    opts.forEach((o, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'ans'; b.dataset.v = String(o.v);
+      const t = document.createElement('span'); t.textContent = o.t;
+      const s = document.createElement('small'); s.textContent = o.s;
+      b.append(t, s);
+      b.addEventListener('click', () => answerButton(o.v, b));
+      box.appendChild(b);
+    });
+  }
+  await playTask();
+  shownAt = performance.now();
+}
+
+async function playTask() {
+  if (!task || playing) return;
+  playing = true;
+  const btn = $('t-play'); btn.classList.add('sounding');
+  const t0 = ctx.currentTime + 0.1;
+  let total = 0;
+  if (task.kind === 'hl') { piano(task.a, t0, 1.0); piano(task.b, t0 + 0.8, 1.2); total = 1.8; }
+  if (task.kind === 'ear') { piano(60, t0, 1.0, 0.35); piano(task.m, t0 + 1.1, 1.4); total = 2.3; }
+  if (task.kind === 'echo') { task.seq.forEach((m, i) => piano(m, t0 + i * 0.6, 0.9)); total = task.seq.length * 0.6 + 0.4; }
+  if (task.kind === 'interval') { piano(task.root, t0, 1.0); piano(task.root + task.st, t0 + 0.75, 1.0); piano(task.root, t0 + 1.6, 1.4, 0.35); piano(task.root + task.st, t0 + 1.6, 1.4, 0.35); total = 2.6; }
+  if (task.kind === 'chord') {
+    const ch = [task.root, task.root + (task.major ? 4 : 3), task.root + 7];
+    ch.forEach(m => piano(m, t0, 1.6, 0.3));
+    ch.forEach((m, i) => piano(m, t0 + 1.4 + i * 0.32, 1.0, 0.4));
+    total = 2.9;
+  }
+  await sleep(total * 1000);
+  btn.classList.remove('sounding');
+  playing = false;
+}
+$('t-play').addEventListener('click', () => { ensureCtx(); if (ctx.state !== 'running') ctx.resume(); playTask(); });
+
+function onKey(m, k) {
+  ensureCtx(); if (ctx.state !== 'running') ctx.resume();
+  piano(m, undefined, 1.1, 0.45);
+  if (k) { k.classList.add('down'); setTimeout(() => k.classList.remove('down'), 140); }
+  if (!task || answered || playing) return;
+  if (task.kind === 'read' || task.kind === 'ear') {
+    const ok = m === task.m;
+    if (ok) flashKey(m, 'ok', 700); else { flashKey(m, 'bad', 700); setTimeout(() => flashKey(task.m, 'show', 1800), 250); }
+    if (task.kind === 'read') { const n = $('t-staff').querySelector('.note'); if (n) n.classList.add('ok'); }
+    if (!ok) { addConfusion(task.m, m); setTimeout(() => piano(task.m, undefined, 1.2, 0.4), 450); }
+    finishTask(ok, ok ? 'Так! Це ' + fullName(m) : 'Це ' + fullName(task.m), ok ? '' : 'Ти натиснув ' + nm(m));
+    return;
+  }
+  if (task.kind === 'echo') {
+    const want = task.seq[task.pos];
+    const dot = $('t-seq').children[task.pos];
+    if (m === want) {
+      flashKey(m, 'ok', 400); dot.classList.add('ok'); dot.textContent = nm(m).slice(0, 2);
+      task.pos++;
+      if (task.pos === task.seq.length) finishTask(true, 'Так! ' + task.seq.map(nm).join(' – '));
+    } else {
+      flashKey(m, 'bad', 600); dot.classList.add('bad');
+      addConfusion(want, m);
+      setTimeout(async () => { for (const s of task.seq) { flashKey(s, 'show', 500); piano(s, undefined, 0.8, 0.4); await sleep(560); } }, 400);
+      finishTask(false, 'Мелодія була: ' + task.seq.map(nm).join(' – '));
+    }
+  }
+}
+
+function answerButton(v, b) {
+  if (!task || answered) return;
+  ensureCtx();
+  let ok, title, sub = '';
+  if (task.kind === 'hl') {
+    const correct = task.b > task.a ? 'up' : 'down'; ok = v === correct;
+    title = ok ? 'Так, ' + (correct === 'up' ? 'вище' : 'нижче') + '!' : 'Ні, другий звук ' + (correct === 'up' ? 'вище' : 'нижче');
+    sub = nm(task.a) + ' → ' + nm(task.b);
+  }
+  if (task.kind === 'chord') {
+    ok = v === task.major;
+    title = (ok ? 'Так! ' : 'Це ') + (task.major ? 'мажор' : 'мінор');
+    sub = nm(task.root) + (task.major ? ' мажор' : ' мінор') + ': ' + [task.root, task.root + (task.major ? 4 : 3), task.root + 7].map(nm).join(' – ');
+  }
+  if (task.kind === 'interval') {
+    ok = v === task.g;
+    title = (ok ? 'Так! ' : 'Це ') + INTERVAL_NAMES[task.st];
+    sub = nm(task.root) + ' → ' + nm(task.root + task.st);
+    if (!ok) addConfusion('i:' + task.g, 'i:' + v);
+  }
+  b.classList.add(ok ? 'ok' : 'bad');
+  if (!ok) { const right = [...$('t-answers').children].find(x => x.dataset.v === String(task.kind === 'hl' ? (task.b > task.a ? 'up' : 'down') : task.kind === 'chord' ? task.major : task.g)); if (right) right.classList.add('show'); }
+  finishTask(ok, title, sub);
+}
+
+function addConfusion(want, got) { const k = want + '>' + got; confusions[k] = (confusions[k] || 0) + 1; }
+
+function finishTask(ok, title, sub) {
+  answered = true;
+  tasks++;
+  results.push(ok);
+  let gained = 0;
+  if (ok) {
+    const secs = (performance.now() - shownAt) / 1000;
+    const speed = Math.max(0, 5 - Math.floor(secs));
+    combo++; maxCombo = Math.max(maxCombo, combo);
+    gained = (10 + speed) * multFor(combo);
+    score += gained;
+    setTimeout(() => chime(), 120);
+  } else {
+    combo = 0; thud();
+  }
+  renderSun(combo);
+  $('p-score').textContent = score;
+  setStep();
+  const fb = $('t-fb');
+  fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+  fb.textContent = '';
+  const line = document.createElement('span'); line.textContent = title + (ok ? '  ' : '');
+  if (ok) { const p = document.createElement('span'); p.className = 'plus'; p.textContent = '+' + gained; line.appendChild(p); }
+  fb.appendChild(line);
+  if (sub) { const s = document.createElement('small'); s.textContent = sub; fb.appendChild(s); }
+  setTimeout(nextTask, ok ? 1000 : 2300);
+}
+
+/* ---------- Result ---------- */
+function finishLevel() {
+  const correct = results.filter(Boolean).length;
+  const acc = Math.round(100 * correct / results.length);
+  const stars = acc >= 95 ? 3 : acc >= 80 ? 2 : acc >= 60 ? 1 : 0;
+  const prev = progress[L.id] || { stars: 0, score: 0 };
+  const newBest = score > prev.score;
+  progress[L.id] = { stars: Math.max(prev.stars, stars), score: Math.max(prev.score, score) };
+  store.set('np_progress', progress);
+  $('r-level').textContent = 'Рівень ' + (li + 1) + ' · ' + L.title;
+  $('r-title').textContent = stars === 3 ? 'Бездоганно!' : stars === 2 ? 'Чудово!' : stars === 1 ? 'Рівень пройдено!' : 'Майже! Спробуй ще раз';
+  const st = $('r-stars'); st.textContent = ''; st.setAttribute('aria-label', stars + ' з 3 зірок');
+  for (let i = 0; i < 3; i++) { const s = document.createElement('span'); s.textContent = '★'; if (i < stars) s.className = 'on'; st.appendChild(s); }
+  const chips = $('r-chips'); chips.textContent = '';
+  [['Правильно', correct + '/' + results.length], [newBest ? 'Бали · рекорд!' : 'Бали', score], ['Найкраще комбо', maxCombo]].forEach(([l, v]) => {
+    const d = document.createElement('div'); d.className = 'chip';
+    const s = document.createElement('small'); s.textContent = l; const b = document.createElement('b'); b.textContent = v;
+    d.append(s, b); chips.appendChild(d);
+  });
+  const tips = [];
+  const conf = Object.entries(confusions).sort((a, b) => b[1] - a[1]);
+  if (conf.length) {
+    const [k] = conf[0]; const [w, g] = k.split('>');
+    if (w.startsWith('i:')) tips.push('Найчастіше плутаєш ' + INTERVAL_GROUPS[w.slice(2)].label.toLowerCase() + ' і ' + INTERVAL_GROUPS[g.slice(2)].label.toLowerCase() + '. Проспівай обидва інтервали від однієї ноти.');
+    else tips.push('Найчастіше плутаєш ' + nm(+w) + ' і ' + nm(+g) + '. Знайди обидві ноти на інструменті й порівняй.');
+  }
+  if (stars === 0) tips.push('Щоб відкрити наступний рівень, треба хоча б 8 правильних відповідей з 12.');
+  if (stars === 3) tips.push('Ідеально! Спробуй ще раз швидше, щоб набрати більше балів.');
+  if (L.type === 'read' && stars < 3) tips.push('Підказка: ноти на лініях і між лініями чергуються: До (додаткова лінія), Ре (під лінією), Мі (на першій лінії)…');
+  if (L.type === 'chord' && stars < 3) tips.push('Мажор звучить світло, як сонце, мінор сумно, як дощ. Послухай середню ноту акорду.');
+  if (!tips.length) tips.push('Тренуйся кілька хвилин щодня: так ноти запам\'ятовуються найкраще.');
+  const tl = $('r-tips'); tl.textContent = '';
+  tips.slice(0, 2).forEach(t => { const li2 = document.createElement('li'); li2.textContent = t; tl.appendChild(li2); });
+  const hasNext = li < LEVELS.length - 1;
+  $('r-next').hidden = !hasNext || !unlocked(li + 1);
+  show('v-result');
+}
+$('r-next').addEventListener('click', () => startLevel(li + 1));
+$('r-again').addEventListener('click', () => startLevel(li));
+$('r-map').addEventListener('click', () => { renderMap(); show('v-map'); });
+$('p-exit').addEventListener('click', () => { task = null; renderMap(); show('v-map'); });
+
+/* ---------- Map ---------- */
+function renderMap() {
+  const box = $('worlds'); box.textContent = '';
+  let idx = 0, nextIdx = -1;
+  LEVELS.forEach((lv, i) => { if (nextIdx < 0 && unlocked(i) && !(progress[lv.id] && progress[lv.id].stars > 0)) nextIdx = i; });
+  WORLDS.forEach(w => {
+    const sec = document.createElement('section'); sec.className = 'world';
+    const head = document.createElement('div'); head.className = 'world-head';
+    const h = document.createElement('h2'); h.textContent = w.title;
+    const got = w.levels.reduce((s, lv) => s + ((progress[lv.id] && progress[lv.id].stars) || 0), 0);
+    const sp = document.createElement('span'); sp.textContent = '★ ' + got + ' / ' + w.levels.length * 3;
+    head.append(h, sp);
+    const tiles = document.createElement('div'); tiles.className = 'tiles';
+    w.levels.forEach(lv => {
+      const i = idx++;
+      const open = unlocked(i);
+      const b = document.createElement('button'); b.type = 'button';
+      b.className = 'tile' + (open ? '' : ' locked') + (i === nextIdx ? ' next' : '');
+      const n = document.createElement('span'); n.className = 'n'; n.textContent = String(i + 1);
+      if (!open) { n.innerHTML = '<svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><rect x="1" y="7" width="12" height="8" rx="2" fill="currentColor"/><path d="M4 7V5a3 3 0 0 1 6 0v2" stroke="currentColor" stroke-width="2" fill="none"/></svg>'; }
+      const t = document.createElement('span'); t.className = 't'; t.textContent = lv.title;
+      const s = document.createElement('span'); s.className = 's';
+      const stars = (progress[lv.id] && progress[lv.id].stars) || 0;
+      s.innerHTML = [0, 1, 2].map(k => '<span' + (k < stars ? ' class="on"' : '') + '>★</span>').join('');
+      b.append(n, t, s);
+      b.setAttribute('aria-label', (i + 1) + '. ' + lv.title + (open ? ', зірок: ' + stars : ', закрито'));
+      if (open) b.addEventListener('click', () => startLevel(i));
+      else b.disabled = true;
+      tiles.appendChild(b);
+    });
+    sec.append(head, tiles); box.appendChild(sec);
+  });
+  const t = totals();
+  $('m-stars').textContent = t.stars; $('m-stars-max').textContent = LEVELS.length * 3; $('m-score').textContent = t.score;
+  $('m-next').textContent = nextIdx >= 0 ? 'Далі: рівень ' + (nextIdx + 1) + ', «' + LEVELS[nextIdx].title + '».' : 'Усі рівні пройдено! Збирай три зірки скрізь.';
+  $('teacher').textContent = teacher ? 'Режим викладача: усі рівні відкриті (вимкнути)' : 'Я викладач: відкрити всі рівні';
+}
+$('teacher').addEventListener('click', () => { teacher = !teacher; store.set('np_teacher', teacher); renderMap(); });
+
+if (location.hash === '#dev') window.__np = { get task() { return task; }, get answered() { return answered; }, get playing() { return playing; }, onKey, answerButton, LEVELS, startLevel };
+renderMap();
+})();
+</script>
+
+</body>
+</html>
