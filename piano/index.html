@@ -114,7 +114,7 @@ button { font: inherit; color: inherit; }
 .steps i.bad { background: var(--bad); }
 .steps i.now { background: var(--sun); }
 .sunbox { display: grid; justify-items: center; gap: 0; }
-.sunbox svg { width: 54px; height: 40px; overflow: visible; }
+.sunbox svg { width: 46px; height: 46px; overflow: visible; }
 .sunbox .ray { stroke: var(--line); stroke-width: 3; stroke-linecap: round; transition: stroke .2s; }
 .sunbox .ray.on { stroke: var(--sun); }
 .sunbox .disc { fill: var(--sun-soft); stroke: var(--sun); stroke-width: 3; }
@@ -225,10 +225,9 @@ button { font: inherit; color: inherit; }
   <!-- MAP -->
   <main id="v-map" class="fade" style="display:grid; gap:18px">
     <section class="summary">
-      <svg viewBox="0 0 64 64" aria-hidden="true">
-        <path d="M14 44 A18 18 0 0 1 50 44" fill="var(--sun-soft)" stroke="var(--sun)" stroke-width="4"/>
-        <line x1="8" y1="44" x2="56" y2="44" stroke="var(--sun)" stroke-width="4" stroke-linecap="round"/>
-        <g stroke="var(--sun)" stroke-width="4" stroke-linecap="round"><line x1="32" y1="18" x2="32" y2="10"/><line x1="17" y1="24" x2="12" y2="19"/><line x1="47" y1="24" x2="52" y2="19"/></g>
+      <svg viewBox="-32 -32 64 64" aria-hidden="true">
+        <g id="m-rays"></g>
+        <circle id="m-disc" r="13" fill="var(--sun-soft)" stroke="var(--sun)" stroke-width="4"/>
       </svg>
       <div>
         <p><b id="m-stars">0</b> <span class="muted">з <span id="m-stars-max">42</span> зірок</span> · <b id="m-score">0</b> <span class="muted">балів</span></p>
@@ -253,10 +252,9 @@ button { font: inherit; color: inherit; }
       <div class="score"><small>Бали</small><output id="p-score">0</output></div>
     </div>
     <div class="sunbox" id="sunbox" aria-hidden="true">
-      <svg viewBox="-30 -26 60 32">
+      <svg viewBox="-28 -28 56 56">
         <g id="rays"></g>
-        <path class="disc" d="M-12 0 A12 12 0 0 1 12 0 Z"/>
-        <line x1="-28" y1="0" x2="28" y2="0" stroke="var(--sun)" stroke-width="3" stroke-linecap="round"/>
+        <circle class="disc" r="11"/>
       </svg>
       <small id="p-combo"></small>
     </div>
@@ -494,8 +492,8 @@ window.addEventListener('keydown', e => {
 /* ---------- Sun / combo ---------- */
 const raysG = $('rays');
 for (let i = 0; i < 10; i++) {
-  const a = Math.PI + (i + 0.5) * Math.PI / 10;
-  el('line', { class: 'ray', x1: Math.cos(a) * 16, y1: Math.sin(a) * 16, x2: Math.cos(a) * 24, y2: Math.sin(a) * 24 }, raysG);
+  const a = -Math.PI / 2 + i * Math.PI / 5;
+  el('line', { class: 'ray', x1: Math.cos(a) * 15, y1: Math.sin(a) * 15, x2: Math.cos(a) * 22, y2: Math.sin(a) * 22 }, raysG);
 }
 function multFor(c) { return c >= 10 ? 3 : c >= 5 ? 2 : 1; }
 function renderSun(combo) {
@@ -555,7 +553,26 @@ function startLevel(i) {
   $('p-score').textContent = '0';
   renderSun(0);
   show('v-play');
-  nextTask();
+  task = null;
+  if (L.type === 'ear' || L.type === 'echo') playScaleIntro(); else nextTask();
+}
+
+// Before ear-training levels: play the C major scale with the keys lighting up
+async function playScaleIntro() {
+  const myLevel = L;
+  $('t-staff').style.display = 'none'; $('t-seq').hidden = true; $('t-answers').hidden = true; $('t-listen').hidden = true;
+  $('t-prompt').textContent = 'Послухай гаму До мажор';
+  const fb = $('t-fb'); fb.className = 'feedback'; fb.textContent = 'Запам\'ятай, як звучить кожна нота';
+  renderKeyboard(L.kb[0], L.kb[1], 'all');
+  playing = true;
+  for (const m of whitesIn(60, 72)) {
+    if (L !== myLevel || $('v-play').hidden) { playing = false; return; }
+    piano(m, undefined, 0.8, 0.45); flashKey(m, 'ok', 380);
+    await sleep(430);
+  }
+  await sleep(500);
+  playing = false;
+  if (L === myLevel && !$('v-play').hidden) nextTask();
 }
 
 function setStep() {
@@ -651,10 +668,27 @@ function onKey(m, k) {
     if (m === want) {
       flashKey(m, 'ok', 400); dot.classList.add('ok'); dot.textContent = nm(m).slice(0, 2);
       task.pos++;
-      if (task.pos === task.seq.length) finishTask(true, 'Так! ' + task.seq.map(nm).join(' – '));
+      if (task.pos === task.seq.length) finishTask(true, 'Так! ' + task.seq.map(nm).join(' – '), task.retry ? 'З другої спроби: половина балів' : '');
     } else {
       flashKey(m, 'bad', 600); dot.classList.add('bad');
       addConfusion(want, m);
+      if (!task.retry) {
+        // one more try: show the first note and replay the melody
+        task.retry = true; task.pos = 0; answered = true;
+        const fb = $('t-fb'); fb.className = 'feedback bad'; fb.textContent = '';
+        const a = document.createElement('span'); a.textContent = 'Ще одна спроба!';
+        const b = document.createElement('small'); b.textContent = 'Перша нота: ' + nm(task.seq[0]) + '. Послухай ще раз.';
+        fb.append(a, b);
+        setTimeout(async () => {
+          if (!task || task.kind !== 'echo') return;
+          const s = $('t-seq'); s.innerHTML = task.seq.map(() => '<i></i>').join('');
+          s.children[0].textContent = nm(task.seq[0]).slice(0, 2);
+          flashKey(task.seq[0], 'show', 1800);
+          await playTask();
+          answered = false;
+        }, 900);
+        return;
+      }
       setTimeout(async () => { for (const s of task.seq) { flashKey(s, 'show', 500); piano(s, undefined, 0.8, 0.4); await sleep(560); } }, 400);
       finishTask(false, 'Мелодія була: ' + task.seq.map(nm).join(' – '));
     }
@@ -698,6 +732,7 @@ function finishTask(ok, title, sub) {
     const speed = Math.max(0, 5 - Math.floor(secs));
     combo++; maxCombo = Math.max(maxCombo, combo);
     gained = (10 + speed) * multFor(combo);
+    if (task && task.retry) gained = Math.round(gained / 2);
     score += gained;
     setTimeout(() => chime(), 120);
   } else {
@@ -791,6 +826,13 @@ function renderMap() {
     sec.append(head, tiles); box.appendChild(sec);
   });
   const t = totals();
+  const mr = $('m-rays'); mr.textContent = '';
+  const lit = Math.round(12 * t.stars / (LEVELS.length * 3));
+  for (let i = 0; i < 12; i++) {
+    const a = -Math.PI / 2 + i * Math.PI / 6;
+    el('line', { x1: Math.cos(a) * 18, y1: Math.sin(a) * 18, x2: Math.cos(a) * 28, y2: Math.sin(a) * 28, stroke: i < lit ? 'var(--sun)' : 'var(--line)', 'stroke-width': 4, 'stroke-linecap': 'round' }, mr);
+  }
+  $('m-disc').setAttribute('fill', lit >= 12 ? 'var(--sun)' : 'var(--sun-soft)');
   $('m-stars').textContent = t.stars; $('m-stars-max').textContent = LEVELS.length * 3; $('m-score').textContent = t.score;
   $('m-next').textContent = nextIdx >= 0 ? 'Далі: рівень ' + (nextIdx + 1) + ', «' + LEVELS[nextIdx].title + '».' : 'Усі рівні пройдено! Збирай три зірки скрізь.';
   $('teacher').textContent = teacher ? 'Режим викладача: усі рівні відкриті (вимкнути)' : 'Я викладач: відкрити всі рівні';
