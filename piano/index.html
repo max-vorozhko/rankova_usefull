@@ -198,6 +198,33 @@ button { font: inherit; color: inherit; }
 .tips { margin: 0; padding: 12px 14px; border-radius: 12px; background: var(--sun-soft); display: grid; gap: 6px; list-style: none; text-align: left; font-size: 14px; }
 .actions { display: grid; gap: 8px; }
 .actions .two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.pbright { display: flex; align-items: center; gap: 10px; }
+.btn.help { min-height: 36px; width: 36px; padding: 0; border-radius: 50%; font-family: var(--font-display); font-size: 18px; }
+.summary .cheat { grid-column: 1 / -1; min-height: 44px; }
+.overlay { position: fixed; inset: 0; z-index: 30; background: rgba(15, 13, 10, .55); display: flex; align-items: center; justify-content: center;
+  padding: max(12px, env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) max(12px, env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); }
+.panel.learn { background: var(--card); color: var(--ink); border-radius: 20px; width: 100%; max-width: 520px; max-height: 100%; overflow-y: auto; box-sizing: border-box; display: grid; gap: 14px; padding: 18px 16px 0; }
+.ln-head h2 { font-size: 24px; line-height: 1.15; }
+.ln-body { display: grid; gap: 18px; }
+.ln-sec { display: grid; gap: 10px; }
+.ln-sec h3 { font-size: 16px; }
+.ln-sec .staff { max-width: 100%; }
+.staff .nn { font-family: var(--font-body); font-size: 11px; font-weight: 600; fill: var(--muted); text-anchor: middle; }
+.staff .note.tap { cursor: pointer; }
+.staff .note.hot .head { fill: var(--sun-deep); }
+.kb.mini { height: 120px; }
+.key.mark.w::before { content: ''; position: absolute; left: 50%; top: 66%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: var(--sun); }
+.key.hot.w { background: var(--sun-soft) !important; }
+.key.hot.b { background: var(--sun-deep) !important; }
+.demo-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.demo-row .btn { flex: 1 1 140px; min-height: 48px; font-size: 14px; flex-direction: column; gap: 2px; padding: 6px 10px; }
+.demo-row .btn small { display: block; font-weight: 500; color: var(--muted); font-size: 12px; }
+.ln-foot { position: sticky; bottom: 0; background: var(--card); display: grid; gap: 6px; justify-items: center; padding: 10px 0 14px; border-top: 1px solid var(--line); }
+.ln-foot .btn { width: 100%; }
+#ln-tabs { flex-wrap: wrap; }
+.seg { display: flex; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.seg button { flex: 1; appearance: none; border: 0; background: transparent; color: var(--ink); font: 500 13px/1.2 var(--font-body); padding: 9px 6px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .fade { animation: fade .3s ease both; }
 @keyframes fade { from { opacity: .001; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @media (max-width: 370px) {
@@ -233,6 +260,7 @@ button { font: inherit; color: inherit; }
         <p><b id="m-stars">0</b> <span class="muted">з <span id="m-stars-max">42</span> зірок</span> · <b id="m-score">0</b> <span class="muted">балів</span></p>
         <p class="muted" id="m-next">Почни з першого рівня.</p>
       </div>
+      <button class="btn cheat" id="m-cheat" type="button">Шпаргалка: ноти, інтервали, акорди</button>
     </section>
     <div id="worlds" style="display:grid; gap:20px"></div>
     <div class="map-foot">
@@ -249,7 +277,10 @@ button { font: inherit; color: inherit; }
         <b id="p-title"></b>
         <div class="steps" id="p-steps"></div>
       </div>
-      <div class="score"><small>Бали</small><output id="p-score">0</output></div>
+      <div class="pbright">
+        <button class="btn help" id="p-help" type="button" aria-label="Правило рівня">?</button>
+        <div class="score"><small>Бали</small><output id="p-score">0</output></div>
+      </div>
     </div>
     <div class="sunbox" id="sunbox" aria-hidden="true">
       <svg viewBox="-28 -28 56 56">
@@ -299,6 +330,21 @@ button { font: inherit; color: inherit; }
   </main>
 </div>
 
+<div class="overlay" id="ov-learn" hidden role="dialog" aria-modal="true" aria-labelledby="ln-title">
+  <div class="panel learn">
+    <div class="ln-head">
+      <div class="eyebrow" id="ln-eyebrow">Перед рівнем</div>
+      <h2 id="ln-title"></h2>
+    </div>
+    <div class="seg" id="ln-tabs" hidden></div>
+    <div class="ln-body" id="ln-body"></div>
+    <div class="ln-foot">
+      <button class="btn primary" id="ln-go" type="button">Зрозуміло, грати!</button>
+      <button class="link" id="ln-skip" type="button">Я це знаю, пропустити</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (() => {
 'use strict';
@@ -334,18 +380,21 @@ const INTERVAL_GROUPS = {
 /* ---------- Levels ----------
    type: read (note on staff -> key), hl (higher/lower), ear (find by ear), echo (repeat 3 notes),
          interval, chord, mix. kb: keyboard range. labels: 'all' | 'c' | 'none'. */
+const FIND = 'Знайди ноту на клавіатурі';
+const EAR = 'Спершу звучить До, потім загадана нота. Знайди її';
 const WORLDS = [
   { id: 'treble', title: 'Скрипковий ключ', levels: [
-    { id: 'r1', title: 'До, Ре, Мі', type: 'read', clef: 'treble', notes: [60, 62, 64], kb: [60, 71], labels: 'all', intro: 'Знайди ноту на клавіатурі' },
-    { id: 'r2', title: 'Від До до Соль', type: 'read', clef: 'treble', notes: whitesIn(60, 67), kb: [60, 71], labels: 'c', intro: 'Знайди ноту на клавіатурі' },
-    { id: 'r3', title: 'Уся перша октава', type: 'read', clef: 'treble', notes: whitesIn(60, 72), kb: [60, 72], labels: 'none', intro: 'Знайди ноту на клавіатурі' },
-    { id: 'r4', title: 'Друга октава', type: 'read', clef: 'treble', notes: whitesIn(64, 79), kb: [60, 79], labels: 'none', intro: 'Знайди ноту на клавіатурі' }
+    { id: 'r1', title: 'Нижній тетрахорд: До–Фа', type: 'read', clef: 'treble', notes: whitesIn(60, 65), kb: [60, 72], labels: 'all', intro: FIND },
+    { id: 'r2', title: 'Верхній тетрахорд: Соль–До', type: 'read', clef: 'treble', notes: whitesIn(67, 72), kb: [60, 72], labels: 'all', intro: FIND },
+    { id: 'r3', title: 'Уся перша октава', type: 'read', clef: 'treble', notes: whitesIn(60, 72), kb: [60, 72], labels: 'none', intro: FIND },
+    { id: 'r4', title: 'Друга октава', type: 'read', clef: 'treble', notes: whitesIn(64, 79), kb: [60, 79], labels: 'none', intro: FIND }
   ] },
   { id: 'ear', title: 'Слух', levels: [
     { id: 'e1', title: 'Вище чи нижче?', type: 'hl', intro: 'Другий звук вище чи нижче?' },
-    { id: 'e2', title: 'Знайди ноту на слух', type: 'ear', notes: whitesIn(60, 67), kb: [60, 71], labels: 'all', intro: 'Спершу звучить До, потім загадана нота. Знайди її' },
-    { id: 'e3', title: 'Луна', type: 'echo', notes: whitesIn(60, 67), kb: [60, 71], labels: 'all', intro: 'Повтори мелодію з 3 нот' },
-    { id: 'e4', title: 'Уся октава на слух', type: 'ear', notes: whitesIn(60, 72), kb: [60, 72], labels: 'c', intro: 'Спершу звучить До, потім загадана нота. Знайди її' }
+    { id: 'e2', title: 'На слух: До–Фа', type: 'ear', notes: whitesIn(60, 65), kb: [60, 72], labels: 'all', intro: EAR },
+    { id: 'e3', title: 'На слух: Соль–До', type: 'ear', notes: whitesIn(67, 72), kb: [60, 72], labels: 'all', intro: EAR },
+    { id: 'e4', title: 'Луна', type: 'echo', notes: whitesIn(60, 67), kb: [60, 72], labels: 'all', intro: 'Повтори мелодію з 3 нот' },
+    { id: 'e5', title: 'Уся октава на слух', type: 'ear', notes: whitesIn(60, 72), kb: [60, 72], labels: 'c', intro: EAR }
   ] },
   { id: 'harmony', title: 'Гармонія', levels: [
     { id: 'h1', title: 'Терція, квінта, октава', type: 'interval', groups: ['third', 'fifth', 'octave'], intro: 'Який інтервал прозвучав?' },
@@ -353,8 +402,9 @@ const WORLDS = [
     { id: 'h3', title: 'Мажор чи мінор?', type: 'chord', intro: 'Акорд звучить світло чи сумно?' }
   ] },
   { id: 'bass', title: 'Басовий ключ і фінал', levels: [
-    { id: 'b1', title: 'Басовий ключ', type: 'read', clef: 'bass', notes: whitesIn(48, 55), kb: [48, 60], labels: 'c', intro: 'Знайди ноту на клавіатурі' },
-    { id: 'b2', title: 'Мала октава', type: 'read', clef: 'bass', notes: whitesIn(43, 60), kb: [43, 60], labels: 'none', intro: 'Знайди ноту на клавіатурі' },
+    { id: 'b1', title: 'Басовий: До–Фа', type: 'read', clef: 'bass', notes: whitesIn(48, 53), kb: [48, 60], labels: 'all', intro: FIND },
+    { id: 'b2', title: 'Басовий: Соль–До', type: 'read', clef: 'bass', notes: whitesIn(55, 60), kb: [48, 60], labels: 'c', intro: FIND },
+    { id: 'b3', title: 'Мала октава і нижче', type: 'read', clef: 'bass', notes: whitesIn(43, 60), kb: [43, 60], labels: 'none', intro: FIND },
     { id: 'f1', title: 'Фінал: усе разом', type: 'mix', intro: '' }
   ] }
 ];
@@ -413,17 +463,18 @@ const STAFF = { top: 30, gap: 12, x0: 6, x1: 274, noteX: 180 };
 const CLEF = { treble: { bottom: 30, glyph: '\u{1D11E}', size: 62, y: 4 }, bass: { bottom: 18, glyph: '\u{1D122}', size: 50, y: 1 } };
 function el(tag, attrs, parent) { const e = document.createElementNS(SVGNS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
 function staffY(clef, m) { const b = CLEF[clef].bottom; const bottomY = STAFF.top + 4 * STAFF.gap; return bottomY - (diat(m) - b) * (STAFF.gap / 2); }
-function drawStaff(clef) {
-  const s = $('t-staff'); s.textContent = '';
-  for (let i = 0; i < 5; i++) el('line', { class: 'ln', x1: STAFF.x0, x2: STAFF.x1, y1: STAFF.top + i * STAFF.gap, y2: STAFF.top + i * STAFF.gap }, s);
+function drawStaff(clef, svg, x1) {
+  const s = svg || $('t-staff'); s.textContent = '';
+  const xe = x1 || STAFF.x1;
+  for (let i = 0; i < 5; i++) el('line', { class: 'ln', x1: STAFF.x0, x2: xe, y1: STAFF.top + i * STAFF.gap, y2: STAFF.top + i * STAFF.gap }, s);
   el('line', { class: 'ln', x1: STAFF.x0, x2: STAFF.x0, y1: STAFF.top, y2: STAFF.top + 4 * STAFF.gap }, s);
   const c = CLEF[clef];
   const t = el('text', { class: 'clef', x: STAFF.x0 + 6, y: STAFF.top + 3 * STAFF.gap + c.y, 'font-size': c.size }, s);
   t.textContent = c.glyph;
   return s;
 }
-function drawNote(clef, m, cls, x) {
-  const s = $('t-staff');
+function drawNote(clef, m, cls, x, svg) {
+  const s = svg || $('t-staff');
   const g = el('g', { class: 'note ' + (cls || '') }, s);
   const y = staffY(clef, m);
   const bottom = CLEF[clef].bottom, top = bottom + 8, d = diat(m);
@@ -441,6 +492,30 @@ function drawNote(clef, m, cls, x) {
 const KEYMAP_WHITE = ['KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon', 'Quote'];
 const KEYMAP_UPPER = ['KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft'];  // black key right of white i
 let kbRange = null, codeToMidi = {};
+function buildKeys(kb, lo, hi, labels, mark) {
+  kb.textContent = '';
+  const whites = whitesIn(lo, hi);
+  const w = 100 / whites.length;
+  whites.forEach(m => {
+    const k = document.createElement('button');
+    k.type = 'button'; k.className = 'key w' + (mark && mark.has(m) ? ' mark' : ''); k.dataset.m = m;
+    k.setAttribute('aria-label', fullName(m));
+    const showLab = labels === 'all' || (labels === 'c' && m % 12 === 0);
+    if (showLab) { const s = document.createElement('span'); s.className = 'lab'; s.textContent = nm(m); k.appendChild(s); }
+    kb.appendChild(k);
+  });
+  for (let m = lo; m <= hi; m++) {
+    if (isWhite(m)) continue;
+    const leftWhite = whites.indexOf(m - 1);
+    if (leftWhite < 0) continue;
+    const k = document.createElement('button');
+    k.type = 'button'; k.className = 'key b' + (mark && mark.has(m) ? ' mark' : ''); k.dataset.m = m;
+    k.setAttribute('aria-label', fullName(m));
+    k.style.left = ((leftWhite + 1) * w - w * 0.3) + '%';
+    k.style.width = (w * 0.6) + '%';
+    kb.appendChild(k);
+  }
+}
 function renderKeyboard(lo, hi, labels) {
   const kb = $('kb'); kb.textContent = '';
   kbRange = [lo, hi]; codeToMidi = {};
@@ -481,13 +556,193 @@ $('kb').addEventListener('pointerdown', e => {
   onKey(+k.dataset.m, k);
 });
 window.addEventListener('keydown', e => {
-  if ($('v-play').hidden || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === 'Escape' && !$('ov-learn').hidden) { closeLesson(); return; }
+  if ($('v-play').hidden || !$('ov-learn').hidden || e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.code in codeToMidi && !$('kbwrap').hidden) { e.preventDefault(); onKey(codeToMidi[e.code], keyEl(codeToMidi[e.code])); return; }
   const btns = [...$('t-answers').children];
   const n = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Digit5: 4 }[e.code];
   if (n !== undefined && btns[n] && !$('t-answers').hidden) { e.preventDefault(); btns[n].click(); }
   if (e.code === 'Space' && !$('t-listen').hidden) { e.preventDefault(); $('t-play').click(); }
 });
+
+/* ---------- Lessons and cheat sheet ---------- */
+function mk(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+function tipsList(lines) { const ul = mk('ul', 'tips'); lines.forEach(t => ul.appendChild(mk('li', '', t))); return ul; }
+function hotKey(kb, m, ms) { const k = kb.querySelector('[data-m="' + m + '"]'); if (!k) return; k.classList.add('hot'); setTimeout(() => k.classList.remove('hot'), ms || 450); }
+function miniKeyboard(lo, hi, mark, onPress) {
+  const kb = mk('div', 'kb mini'); kb.setAttribute('role', 'group'); kb.setAttribute('aria-label', 'Клавіатура');
+  buildKeys(kb, lo, hi, 'all', mark);
+  kb.addEventListener('pointerdown', e => {
+    const k = e.target.closest('.key'); if (!k) return; e.preventDefault();
+    const m = +k.dataset.m; ensureCtx(); if (ctx.state !== 'running') ctx.resume();
+    piano(m, undefined, 1.1, 0.45); hotKey(kb, m); if (onPress) onPress(m);
+  });
+  return kb;
+}
+async function playSeq(kb, notes, gap, onNote) {
+  ensureCtx(); if (ctx.state !== 'running') await ctx.resume();
+  for (const m of notes) { piano(m, undefined, 0.9, 0.45); hotKey(kb, m, gap * 0.9); if (onNote) onNote(m); await sleep(gap); }
+}
+function noteSection(title, clef, notes, kbRange, rules) {
+  const sec = mk('section', 'ln-sec');
+  if (title) sec.appendChild(mk('h3', '', title));
+  if (rules) sec.appendChild(tipsList(rules));
+  const x0 = 62, step = Math.max(30, Math.min(44, (300 - x0) / notes.length)), W = x0 + notes.length * step + 8;
+  const svg = document.createElementNS(SVGNS, 'svg');
+  svg.setAttribute('class', 'staff'); svg.setAttribute('viewBox', '0 6 ' + W + ' 116'); svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', 'Ноти на стані: ' + notes.map(nm).join(', '));
+  drawStaff(clef, svg, W - 4);
+  const groups = {};
+  notes.forEach((m, i) => {
+    const x = x0 + i * step + step / 2;
+    const g = drawNote(clef, m, 'tap', x, svg);
+    el('text', { class: 'nn', x, y: 116 }, svg).textContent = nm(m);
+    groups[m] = g;
+  });
+  const lightNote = (m) => { const g = groups[m]; if (!g) return; g.classList.add('hot'); setTimeout(() => g.classList.remove('hot'), 450); };
+  const kb = miniKeyboard(kbRange[0], kbRange[1], new Set(notes), lightNote);
+  svg.addEventListener('pointerdown', e => {
+    const g = e.target.closest('.note'); if (!g) return;
+    const m = +Object.keys(groups).find(k => groups[k] === g);
+    ensureCtx(); if (ctx.state !== 'running') ctx.resume();
+    piano(m, undefined, 1.1, 0.45); hotKey(kb, m); lightNote(m);
+  });
+  sec.append(svg, kb);
+  const row = mk('div', 'demo-row');
+  const b = mk('button', 'btn', 'Зіграти ці ноти по черзі'); b.type = 'button';
+  b.addEventListener('click', () => playSeq(kb, notes, 480, lightNote));
+  row.appendChild(b); sec.appendChild(row);
+  sec.appendChild(mk('p', 'muted', 'Натискай на ноти чи клавіші, щоб послухати.'));
+  return sec;
+}
+function demoSection(title, rules, kbRange, demos, mark) {
+  const sec = mk('section', 'ln-sec');
+  if (title) sec.appendChild(mk('h3', '', title));
+  if (rules) sec.appendChild(tipsList(rules));
+  const kb = miniKeyboard(kbRange[0], kbRange[1], mark);
+  const row = mk('div', 'demo-row');
+  demos.forEach(d => {
+    const b = mk('button', 'btn'); b.type = 'button';
+    b.appendChild(mk('span', '', d.t)); if (d.s) b.appendChild(mk('small', '', d.s));
+    b.addEventListener('click', () => d.play(kb));
+    row.appendChild(b);
+  });
+  sec.append(row, kb);
+  return sec;
+}
+async function playInterval(kb, a, b) {
+  ensureCtx(); if (ctx.state !== 'running') await ctx.resume();
+  piano(a, undefined, 1, 0.45); hotKey(kb, a, 700); await sleep(700);
+  piano(b, undefined, 1, 0.45); hotKey(kb, b, 700); await sleep(800);
+  piano(a, undefined, 1.3, 0.35); piano(b, undefined, 1.3, 0.35); hotKey(kb, a, 1100); hotKey(kb, b, 1100);
+}
+async function playChord(kb, notes) {
+  ensureCtx(); if (ctx.state !== 'running') await ctx.resume();
+  notes.forEach(m => { piano(m, undefined, 1.5, 0.3); hotKey(kb, m, 1200); });
+  await sleep(1300);
+  for (const m of notes) { piano(m, undefined, 0.9, 0.4); hotKey(kb, m, 300); await sleep(330); }
+}
+const TREBLE_RULES = [
+  'Скрипковий ключ «обіймає» другу лінію знизу: на ній стоїть Соль першої октави.',
+  'До першої октави пишеться на маленькій додатковій лінії під станом.',
+  'Лінії знизу вгору: Мі, Соль, Сі, Ре, Фа. Між лініями: Фа, Ля, До, Мі.'
+];
+const BASS_RULES = [
+  'Басовий ключ ставиться на четверту лінію знизу, дві крапки її обіймають: тут Фа малої октави.',
+  'Лінії знизу вгору: Соль, Сі, Ре, Фа, Ля. Між лініями: Ля, До, Мі, Соль.',
+  'До першої октави в басовому ключі пишеться на додатковій лінії над станом.'
+];
+const TETRA = 'Тетрахорд — це чотири сусідні ноти гами. Нижній: До, Ре, Мі, Фа. Верхній: Соль, Ля, Сі, До. Разом вони складають гаму До мажор.';
+const IV_DEMO = { second: [60, 62, 'До – Ре'], third: [60, 64, 'До – Мі'], fourth: [60, 65, 'До – Фа'], fifth: [60, 67, 'До – Соль'], octave: [60, 72, 'До – До'] };
+function intervalSection(groups) {
+  return demoSection('Як звучать інтервали', [
+    'Інтервал — це відстань між двома звуками.',
+    'Рахуй сходинки разом з обома нотами: До, Ре, Мі — це три сходинки, тобто терція.',
+    'Кожен інтервал звучить спершу по черзі, потім разом.'
+  ], [60, 72], groups.map(g => ({ t: INTERVAL_GROUPS[g].label + ': ' + IV_DEMO[g][2], s: INTERVAL_GROUPS[g].hint, play: kb => playInterval(kb, IV_DEMO[g][0], IV_DEMO[g][1]) })));
+}
+function chordSection() {
+  return demoSection('Мажор і мінор', [
+    'Акорд — три ноти, що звучать разом.',
+    'Мажор і мінор відрізняються лише середньою нотою. У мажорі вона вища і звучить світло, як сонце. У мінорі нижча на пів тону і звучить сумно, як дощ.'
+  ], [60, 72], [
+    { t: 'До мажор', s: 'До – Мі – Соль', play: kb => playChord(kb, [60, 64, 67]) },
+    { t: 'До мінор', s: 'До – Мі♭ – Соль', play: kb => playChord(kb, [60, 63, 67]) }
+  ]);
+}
+function lessonFor(L) {
+  const nodes = [];
+  if (L.type === 'read') {
+    const rules = (L.clef === 'bass' ? BASS_RULES : TREBLE_RULES).slice();
+    if (/тетрахорд|До–Фа|Соль–До/.test(L.title)) rules.unshift(TETRA);
+    if (L.id === 'r4') rules.push('Друга октава продовжує ту саму послідовність вище: До другої октави стоїть у третьому проміжку.');
+    nodes.push(noteSection('Ноти цього рівня', L.clef, L.notes, L.kb, rules));
+  }
+  if (L.type === 'ear' || L.type === 'echo') {
+    const rules = L.type === 'echo'
+      ? ['Слухай мелодію цілком і підспівуй назви нот.', 'Якщо помилишся, буде друга спроба з підказкою першої ноти.']
+      : ['Перед кожним завданням звучить До. Це твій орієнтир.', 'Порахуй, на скільки сходинок загадана нота вища за До.'];
+    if (/До–Фа|Соль–До/.test(L.title)) rules.unshift(TETRA);
+    nodes.push(demoSection('Послухай ноти цього рівня', rules, L.kb, [
+      { t: 'Гама До мажор', s: 'від До до До', play: kb => playSeq(kb, whitesIn(60, 72), 430) },
+      { t: 'Ноти рівня', s: L.notes.map(nm).join(' – '), play: kb => playSeq(kb, L.notes, 480) }
+    ], new Set(L.notes)));
+  }
+  if (L.type === 'hl') {
+    nodes.push(demoSection('Вище чи нижче', ['Уяви сходинки: другий звук піднявся чи опустився?', 'Чим далі клавіша праворуч, тим вищий звук.'], [60, 72], [
+      { t: 'Вище', s: 'До → Соль', play: kb => playSeq(kb, [60, 67], 650) },
+      { t: 'Нижче', s: 'Ля → Ре', play: kb => playSeq(kb, [69, 62], 650) }
+    ]));
+  }
+  if (L.type === 'interval') nodes.push(intervalSection(L.groups));
+  if (L.type === 'chord') nodes.push(chordSection());
+  return nodes;
+}
+const CHEAT_TABS = [
+  { t: 'Скрипковий ключ', build: () => [noteSection('', 'treble', whitesIn(60, 79), [60, 79], [TETRA].concat(TREBLE_RULES))] },
+  { t: 'Басовий ключ', build: () => [noteSection('', 'bass', whitesIn(43, 60), [43, 60], BASS_RULES)] },
+  { t: 'Інтервали', build: () => [intervalSection(['second', 'third', 'fourth', 'fifth', 'octave'])] },
+  { t: 'Акорди', build: () => [chordSection()] }
+];
+let lessonDone = null, lessonMode = null;
+function fillBody(nodes) { const b = $('ln-body'); b.textContent = ''; nodes.forEach(n => b.appendChild(n)); }
+function openLesson(L, mode, onDone) {
+  lessonMode = mode; lessonDone = onDone || null;
+  $('ln-eyebrow').textContent = mode === 'pre' ? 'Перед рівнем' : 'Правило рівня';
+  $('ln-title').textContent = L.title;
+  $('ln-tabs').hidden = true;
+  fillBody(lessonFor(L));
+  $('ln-go').textContent = mode === 'pre' ? 'Зрозуміло, грати!' : 'Повернутися до гри';
+  $('ln-skip').hidden = mode !== 'pre';
+  $('ov-learn').hidden = false;
+  $('ov-learn').querySelector('.panel').scrollTop = 0;
+}
+function openCheat(tab) {
+  lessonMode = 'cheat'; lessonDone = null;
+  $('ln-eyebrow').textContent = 'Шпаргалка';
+  $('ln-title').textContent = 'Ноти, інтервали, акорди';
+  const tabs = $('ln-tabs'); tabs.hidden = false; tabs.textContent = '';
+  const pick = (i) => {
+    [...tabs.children].forEach((b, j) => b.setAttribute('aria-pressed', String(i === j)));
+    fillBody(CHEAT_TABS[i].build());
+  };
+  CHEAT_TABS.forEach((c, i) => { const b = mk('button', '', c.t); b.type = 'button'; b.addEventListener('click', () => pick(i)); tabs.appendChild(b); });
+  pick(tab || 0);
+  $('ln-go').textContent = 'Закрити';
+  $('ln-skip').hidden = true;
+  $('ov-learn').hidden = false;
+}
+function closeLesson() {
+  $('ov-learn').hidden = true;
+  $('ln-body').textContent = '';
+  const done = lessonDone; lessonDone = null;
+  if (lessonMode === 'mid') shownAt = performance.now();
+  if (done) done();
+}
+$('ln-go').addEventListener('click', closeLesson);
+$('ln-skip').addEventListener('click', closeLesson);
+$('m-cheat').addEventListener('click', () => openCheat(0));
+$('p-help').addEventListener('click', () => { if (!L) return; if (L.type === 'mix') openCheat(0); else openLesson(L, 'mid'); });
 
 /* ---------- Sun / combo ---------- */
 const raysG = $('rays');
@@ -506,7 +761,7 @@ function renderSun(combo) {
 function makeTask(L, prev) {
   const t = L.type === 'mix' ? pick(['read', 'readbass', 'ear', 'interval', 'chord']) : L.type;
   if (t === 'read' || t === 'readbass') {
-    const src = t === 'readbass' ? LEVELS.find(x => x.id === 'b2') : (L.type === 'mix' ? LEVELS.find(x => x.id === 'r4') : L);
+    const src = t === 'readbass' ? LEVELS.find(x => x.id === 'b3') : (L.type === 'mix' ? LEVELS.find(x => x.id === 'r4') : L);
     let m; do { m = pick(src.notes); } while (prev && prev.m === m && src.notes.length > 1);
     return { kind: 'read', clef: src.clef, m, kb: src.kb, labels: L.type === 'mix' ? 'none' : src.labels, prompt: src.intro };
   }
@@ -516,7 +771,7 @@ function makeTask(L, prev) {
     return { kind: 'hl', a, b, prompt: L.intro };
   }
   if (t === 'ear') {
-    const src = L.type === 'mix' ? LEVELS.find(x => x.id === 'e4') : L;
+    const src = L.type === 'mix' ? LEVELS.find(x => x.id === 'e5') : L;
     let m; do { m = pick(src.notes); } while (prev && prev.m === m);
     return { kind: 'ear', m, kb: src.kb, labels: L.type === 'mix' ? 'c' : src.labels, prompt: src.intro };
   }
@@ -554,7 +809,11 @@ function startLevel(i) {
   renderSun(0);
   show('v-play');
   task = null;
-  if (L.type === 'ear' || L.type === 'echo') playScaleIntro(); else nextTask();
+  $('t-staff').style.display = 'none'; $('t-seq').hidden = true; $('t-answers').hidden = true; $('t-listen').hidden = true;
+  $('t-prompt').textContent = ''; $('t-fb').className = 'feedback'; $('t-fb').textContent = ''; hideKeyboard();
+  const begin = () => { if (L.type === 'ear' || L.type === 'echo') playScaleIntro(); else nextTask(); };
+  const passed = progress[L.id] && progress[L.id].stars > 0;
+  if (L.type !== 'mix' && !passed) openLesson(L, 'pre', begin); else begin();
 }
 
 // Before ear-training levels: play the C major scale with the keys lighting up
