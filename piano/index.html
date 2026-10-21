@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="41ebbb7b-39a4-490c-b748-1b4c177747cc" data-domains="max-vorozhko.github.io"></script>
 <title>Нотна пригода Rankova</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Гра Rankova Studio для фортепіано: читання нот, слух, інтервали й акорди в ігровій формі.">
@@ -358,7 +359,7 @@ input[type="text"]:focus-visible { outline: 3px solid var(--accent); outline-off
           <button class="btn" id="r-again" type="button">Ще раз</button>
           <button class="btn" id="r-map" type="button">Карта рівнів</button>
         </div>
-        <a class="btn" href="https://n813529.alteg.io/?utm_source=games&amp;utm_medium=piano_solfege" target="_blank" rel="noopener">Записатись на урок фортепіано</a>
+        <a class="btn" data-umami-event="Запис на урок" data-umami-event-game="piano" href="https://n813529.alteg.io/?utm_source=games&amp;utm_medium=piano_solfege" target="_blank" rel="noopener">Записатись на урок фортепіано</a>
       </div>
     </section>
   </main>
@@ -410,6 +411,7 @@ input[type="text"]:focus-visible { outline: 3px solid var(--accent); outline-off
 (() => {
 'use strict';
 const $ = id => document.getElementById(id);
+const track = (name, data) => { try { if (window.umami) window.umami.track(name, data); } catch (e) { /* analytics is optional */ } };
 const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } }
@@ -708,6 +710,7 @@ function setName(raw, errEl) {
   if (!NAME_RE.test(name)) { errEl.textContent = 'Ім\'я: від 2 до 20 букв або цифр.'; return false; }
   errEl.textContent = '';
   playerName = name; store.set('np_name', name); store.set('rk_name', name);
+  track('Ноти: ім\'я вказано');
   syncProgress(); renderMap();
   return true;
 }
@@ -894,8 +897,8 @@ function closeLesson() {
   if (done) done();
 }
 $('ln-go').addEventListener('click', closeLesson);
-$('ln-skip').addEventListener('click', closeLesson);
-$('m-cheat').addEventListener('click', () => openCheat(0));
+$('ln-skip').addEventListener('click', () => { track('Ноти: урок пропущено', { level: L ? L.id : '' }); closeLesson(); });
+$('m-cheat').addEventListener('click', () => { track('Ноти: шпаргалка'); openCheat(0); });
 $('p-help').addEventListener('click', () => { if (!L) return; if (L.type === 'mix') openCheat(0); else openLesson(L, 'mid'); });
 
 /* ---------- Sun / combo ---------- */
@@ -956,6 +959,7 @@ function show(view) {
 function startLevel(i) {
   ensureCtx(); if (ctx.state !== 'running') ctx.resume();
   li = i; L = LEVELS[i];
+  track('Ноти: старт рівня', { level: L.id });
   tasks = 0; results = []; score = 0; combo = 0; maxCombo = 0; confusions = {};
   $('p-title').textContent = (i + 1) + '. ' + L.title;
   $('p-steps').innerHTML = Array.from({ length: TASKS_PER_LEVEL }, () => '<i></i>').join('');
@@ -1174,6 +1178,7 @@ function finishLevel() {
   progress[L.id] = { stars: Math.max(prev.stars, stars), score: Math.max(prev.score, score) };
   store.set('np_progress', progress);
   addMonthScore(score);
+  track('Ноти: рівень завершено', { level: L.id, stars, accuracy: acc });
   syncProgress();
   $('r-name').hidden = !!playerName;
   $('r-name-input').value = store.get('rk_name', '');
