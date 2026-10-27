@@ -1,209 +1,86 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rankova Studio | Корисні Лінки</title>
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="41ebbb7b-39a4-490c-b748-1b4c177747cc" data-domains="max-vorozhko.github.io"></script>
-    
-    <!-- ДОДАНО ФАВІКОН -->
-    <link rel="icon" type="image/png" href="https://github.com/max-vorozhko/rankova_usefull/blob/main/favicon.png?raw=true">
-
-    <!-- Підключення Tailwind CSS для корпоративного стилю Rankova Studio --><script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
-        /* Стилі, що відповідають корпоративному дизайну Rankova Studio */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f8f8; /* Світлий фон */
-        }
-        .main-container {
-            max-width: 400px; /* Обмеження ширини для мобільно-орієнтованого дизайну */
-            margin: 0 auto;
-            padding: 20px 15px;
-        }
-        /* Оновлений стиль для контейнера логотипу */
-        .rankova-logo-img-container {
-            display: flex;
-            justify-content: center;
-            /* Збільшуємо відступ, оскільки прибрали h1 */
-            margin-bottom: 5px; 
-            padding-top: 10px;
-        }
-        .rankova-logo-img {
-            max-width: 250px; /* Обмежте ширину логотипу, щоб він виглядав гармонійно */
-            height: auto;
-        }
-        .rankova-text-yellow {
-            color: #FFC300; /* Яскравий жовтий колір, як на зразку */
-            padding-left: 2px;
-        }
-        .rankova-link-button {
-            /* Стилі для АКТИВНИХ кнопок: жовтий фон */
-            background-color: #FFC300; /* Яскравий жовтий */
-            color: #1a1a1a;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1rem;
-            border-radius: 0.75rem; /* Закруглені кути */
-            font-weight: 600;
-            text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06); /* М'яка тінь */
-            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.125rem;
-            flex-direction: column; /* Дозволяє розміщувати текст в два рядки */
-            text-decoration: none;
-        }
-        .rankova-link-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* НОВИЙ СТИЛЬ: Неактивна (сіра) кнопка */
-        .rankova-disabled-button {
-            /* Сірий фон, щоб показати, що вона неактивна */
-            background-color: #d1d5db; /* Light Gray 300 */
-            color: #6b7280; /* Gray 500 */
-            cursor: default; /* Курсор за замовчуванням */
-            pointer-events: none; /* Вимикає клікабельність */
-
-            padding: 1rem 1.5rem;
-            margin-bottom: 1rem;
-            border-radius: 0.75rem;
-            font-weight: 600;
-            text-align: center;
-            box-shadow: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column; 
-            font-size: 1.125rem;
-            text-decoration: none;
-        }
-
-        /* Стиль для кнопки "Записатись" */
-        .rankova-cta-button {
-            background-color: #FACC15; 
-            color: #1a1a1a;
-            padding: 1rem 1.5rem; /* Зменшено з 1.25rem */
-            margin-top: 1.5rem;
-            margin-bottom: 2rem;
-            border-radius: 0.75rem;
-            font-weight: 800; 
-            text-align: center;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.125rem; /* Зменшено з 1.25rem */
-            border: 2px solid #F0B400; 
-        }
-        .rankova-cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-        }
-        .icon-social {
-            color: #1a1a1a; /* Чорний колір іконок */
-            transition: color 0.1s ease-in-out;
-        }
-        /* Instagram: наведення - рожевий */
-        .icon-social.instagram:hover {
-            filter: hue-rotate(300deg) brightness(0.9); /* Змінює відтінок, імітуючи рожевий, якщо іконка чорна */
-        }
-        /* Telegram: наведення - синій */
-        .icon-social.telegram:hover {
-            color: #0088CC; /* Telegram's brand color */
-        }
-
-        /* Іконки (для соцмереж, замість Font Awesome) */
-        .icon-svg {
-            width: 28px; /* Збільшимо розмір іконок */
-            height: 28px;
-            fill: currentColor;
-        }
-        /* Стиль для Instagram PNG іконки */
-        .icon-img {
-            width: 28px;
-            height: 28px;
-            transition: transform 0.1s ease-in-out;
-        }
-        .icon-social.instagram:hover .icon-img {
-            transform: scale(1.1); /* Збільшення при наведенні */
-            /* filter: hue-rotate(300deg) brightness(0.9); Можна додати, якщо зображення монохромне і потрібно змінити колір */
-        }
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rankova Studio | Ігри для учнів</title>
+<meta name="description" content="Музичні ігри Rankova Studio: ритм, ноти, сольфеджіо і квіз «Який інструмент твій?».">
+<script defer src="https://cloud.umami.is/script.js" data-website-id="41ebbb7b-39a4-490c-b748-1b4c177747cc" data-domains="max-vorozhko.github.io"></script>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+:root{--bg:#FCFCFC;--paper:#fff;--ink:#231F20;--ink-soft:#434343;--edge:#838181;--yellow:#FFDF18;--tint:#FFF3BF;--focus:#90A1B9;
+--h:'Comfortaa',system-ui,sans-serif;--t:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif}
+@media(prefers-color-scheme:dark){:root{--bg:#231F20;--paper:#2e2a2b;--ink:#FCFCFC;--ink-soft:#d3d0d0;--tint:#4a4215}
+.logo{filter:brightness(0) invert(.94)}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--t);font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:440px;margin:0 auto;padding:max(20px,env(safe-area-inset-top)) 18px 32px}
+header{text-align:center;padding:14px 0 6px}
+.logo{height:64px;width:auto}
+h1{font-family:var(--h);font-weight:700;font-size:26px;line-height:1.2;margin:20px 0 8px;text-wrap:balance}
+.lead{margin:0 auto;color:var(--ink-soft);max-width:340px}
+.list{display:grid;gap:12px;margin:26px 0 22px}
+.game{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--paper);color:var(--ink);text-decoration:none;border:1px solid var(--edge);border-radius:24px;transition:background .15s,border-color .15s}
+.game:hover{background:var(--tint);border-color:var(--ink)}
+.ico{flex:none;width:52px;height:52px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;font-size:26px;color:#231F20}
+.txt{flex:1;min-width:0}
+.txt b{display:block;font-family:var(--h);font-weight:700;font-size:17px;line-height:1.2}
+.txt span{display:block;color:var(--ink-soft);font-size:14px;margin-top:2px}
+.go{flex:none;font-size:20px;color:var(--ink-soft)}
+.cta{display:flex;align-items:center;justify-content:center;min-height:56px;padding:0 24px;background:var(--yellow);color:#231F20;font-family:var(--h);font-weight:700;font-size:17px;text-decoration:none;border:1px solid #231F20;border-radius:999px;transition:background .15s}
+.cta:hover{background:#FFE95A}
+.note{text-align:center;color:var(--ink-soft);font-size:14px;margin:10px 0 0}
+footer{margin-top:34px;padding-top:22px;border-top:1px solid var(--edge);text-align:center}
+footer p{margin:0 0 14px;font-family:var(--h);font-weight:700;color:var(--ink)}
+.soc{display:flex;justify-content:center;gap:12px}
+.soc a{width:48px;height:48px;border-radius:50%;border:1px solid var(--edge);display:grid;place-items:center;color:var(--ink);background:var(--paper);transition:background .15s}
+.soc a:hover{background:var(--tint)}
+.soc img{width:24px;height:24px}
+.soc svg{width:24px;height:24px;fill:currentColor}
+@media(prefers-color-scheme:dark){.soc a{background:#FCFCFC;color:#231F20;border-color:#FCFCFC}.soc a:hover{background:var(--yellow)}}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+</style>
 </head>
 <body>
+<div class="wrap">
+<header>
+  <img class="logo" src="rankova-logo.png" alt="Rankova Studio">
+  <h1>Музика — це гра</h1>
+  <p class="lead">Тренуйся між уроками: ритм, ноти і сольфеджіо в ігровій формі.</p>
+</header>
 
-<div class="main-container">
+<nav class="list" aria-label="Ігри">
+  <a class="game" href="https://max-vorozhko.github.io/rankova_studio_drum_falling_notes/" target="_blank" rel="noopener" id="link-drum-trainer" data-umami-event="Головна: відкрити гру" data-umami-event-game="drum-trainer">
+    <span class="ico" aria-hidden="true">🥁</span>
+    <span class="txt"><b>Драм Тренажер</b><span>Падаючі ноти, три вправи, таблиця лідерів</span></span><span class="go" aria-hidden="true">→</span>
+  </a>
+  <a class="game" href="https://max-vorozhko.github.io/rankova_studio_drum/" target="_blank" rel="noopener" id="link-rhythm-trainer" data-umami-event="Головна: відкрити гру" data-umami-event-game="repeat-rhythm">
+    <span class="ico" aria-hidden="true">🎶</span>
+    <span class="txt"><b>Повтори ритм</b><span>Слухай і відтворюй усе довші ритми</span></span><span class="go" aria-hidden="true">→</span>
+  </a>
+  <a class="game" href="https://max-vorozhko.github.io/rankova_usefull/piano/" target="_blank" rel="noopener" id="link-piano-lessons" data-umami-event="Головна: відкрити гру" data-umami-event-game="piano">
+    <span class="ico" aria-hidden="true">🎹</span>
+    <span class="txt"><b>Нотна пригода</b><span>Фортепіано і сольфеджіо, 16 рівнів</span></span><span class="go" aria-hidden="true">→</span>
+  </a>
+  <a class="game" href="https://max-vorozhko.github.io/rankova_quiz/" target="_blank" rel="noopener" id="link-quiz" data-umami-event="Головна: відкрити гру" data-umami-event-game="quiz">
+    <span class="ico" aria-hidden="true">🧠</span>
+    <span class="txt"><b>Квіз «Який інструмент твій?»</b><span>Шість питань, 2 хвилини</span></span><span class="go" aria-hidden="true">→</span>
+  </a>
+</nav>
 
-    <!-- 1. Шапка та Брендінг (Header & Branding) --><header class="text-center mb-8">
-        <!-- Блок з логотипом-зображенням --><div class="rankova-logo-img-container">
-            <img src="https://github.com/max-vorozhko/rankova_studio_drum/blob/main/Rankova%20logo.png?raw=true" alt="Rankova Studio Logo" class="rankova-logo-img">
-        </div>
-        
-        <!-- Підзаголовок --><p class="text-gray-500 mt-1">Корисні ресурси для наших учнів</p>
-    </header>
+<a class="cta" href="https://n813529.alteg.io/company/764262/record-type?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnUSIDwAJ84mJghqcFS8AQfHeoeUPbm_temxO6AUnToR2gV11weB_21f6POnA_aem_46nl6shJ6gAognpwObq5zA&o=" target="_blank" rel="noopener" id="link-book-lesson" data-umami-event="Запис на урок" data-umami-event-game="hub">Записатись на урок</a>
+<p class="note">Музика для всіх, а не тільки для обраних</p>
 
-    <!-- 2. Блок з посиланнями на тренажери --><nav class="space-y-4 mb-8">
-        
-        <!-- Драм Тренажер (РОБОЧЕ ПОСИЛАННЯ 1) --><a href="https://max-vorozhko.github.io/rankova_studio_drum_falling_notes/" target="_blank" class="rankova-link-button" id="link-drum-trainer" data-umami-event="Головна: відкрити гру" data-umami-event-game="drum-trainer">
-            🥁 Драм Тренажер
-        </a>
-
-        <!-- Барабана-гра (РОБОЧЕ ПОСИЛАННЯ 2) --><a href="https://max-vorozhko.github.io/rankova_studio_drum/" target="_blank" class="rankova-link-button" id="link-rhythm-trainer" data-umami-event="Головна: відкрити гру" data-umami-event-game="repeat-rhythm">
-            🎶 Барабана-гра
-        </a>
-
-        <!-- КВІЗ (РОБОЧЕ ПОСИЛАННЯ 3 - ПЕРЕНЕСЕНО ВГОРУ) --><a href="https://max-vorozhko.github.io/rankova_quiz/" target="_blank" class="rankova-link-button" id="link-quiz" data-umami-event="Головна: відкрити гру" data-umami-event-game="quiz">
-            🧠 КВІЗ
-        </a>
-        
-        <!-- Нотна пригода: гра для фортепіано і сольфеджіо --><a href="https://max-vorozhko.github.io/rankova_usefull/piano/" target="_blank" class="rankova-link-button" id="link-piano-lessons" data-umami-event="Головна: відкрити гру" data-umami-event-game="piano">
-            <span>🎹 Нотна пригода</span>
-            <span class="text-xs mt-1 font-normal uppercase">фортепіано і сольфеджіо</span>
-        </a>
-        
-    </nav>
-
-    <!-- 3. Кнопка "Записатись на урок" (CTA - Call to Action) --><a href="https://n813529.alteg.io/company/764262/record-type?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnUSIDwAJ84mJghqcFS8AQfHeoeUPbm_temxO6AUnToR2gV11weB_21f6POnA_aem_46nl6shJ6gAognpwObq5zA&o=" 
-       target="_blank" 
-       class="rankova-cta-button" 
-       id="link-book-lesson" data-umami-event="Запис на урок" data-umami-event-game="hub">
-        ✏️ Записатись на урок!
-    </a>
-
-
-    <!-- Роздільник --><div class="my-10 border-t border-gray-200"></div>
-
-    <!-- 4. Контакти та Соцмережі (Footer/Contacts) --><footer class="text-center">
-        <p class="text-gray-600 mb-4 font-medium">Слідкуй за нами</p>
-        <div class="flex justify-center space-x-6">
-            
-            <!-- Instagram (З реальним посиланням та PNG-зображенням) --><a href="https://www.instagram.com/rankova.studio/" target="_blank" class="icon-social instagram" data-umami-event="Головна: Instagram" aria-label="Instagram Rankova Studio">
-                <img src="https://github.com/max-vorozhko/rankova_usefull/blob/main/insta%20logo.png?raw=true" alt="Instagram Icon" class="icon-img">
-            </a>
-
-            <!-- Telegram (З реальним посиланням та іконкою SVG) --><a href="https://t.me/rankovastudioevents" target="_blank" class="icon-social telegram" data-umami-event="Головна: Telegram" aria-label="Telegram Rankova Studio Events">
-                <svg class="icon-svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19.98 4.204a.78.78 0 0 0-.547-.358L3.132 10.456a.78.78 0 0 0 .142 1.488l4.47 1.396 9.873-6.196a.276.276 0 0 1 .325.045.27.27 0 0 1 .012.336l-8.73 7.846v3.254a.78.78 0 0 0 1.398.53l2.843-2.618 4.416 3.498c.57.34.966.194 1.11-.532L20.33 4.887a.78.78 0 0 0-.35-.683z"/>
-                </svg>
-            </a>
-
-        </div>
-    </footer>
-
+<footer>
+  <p>Слідкуй за нами</p>
+  <div class="soc">
+    <a href="https://www.instagram.com/rankova.studio/" target="_blank" rel="noopener" data-umami-event="Головна: Instagram" aria-label="Instagram Rankova Studio"><img src="insta%20logo.png" alt=""></a>
+    <a href="https://t.me/rankovastudioevents" target="_blank" rel="noopener" data-umami-event="Головна: Telegram" aria-label="Telegram Rankova Studio Events"><svg viewBox="0 0 24 24"><path d="M19.98 4.204a.78.78 0 0 0-.547-.358L3.132 10.456a.78.78 0 0 0 .142 1.488l4.47 1.396 9.873-6.196a.276.276 0 0 1 .325.045.27.27 0 0 1 .012.336l-8.73 7.846v3.254a.78.78 0 0 0 1.398.53l2.843-2.618 4.416 3.498c.57.34.966.194 1.11-.532L20.33 4.887a.78.78 0 0 0-.35-.683z"/></svg></a>
+  </div>
+</footer>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('Сторінка "Корисні Лінки Rankova Studio" оновлена. Фавікон додано.');
-    });
-</script>
-
 </body>
 </html>
